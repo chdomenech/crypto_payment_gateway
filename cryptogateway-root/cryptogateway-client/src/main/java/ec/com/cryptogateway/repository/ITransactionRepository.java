@@ -1,6 +1,6 @@
 package ec.com.cryptogateway.repository;
 
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import ec.com.cryptogateway.entity.TransactionEntity;
 
@@ -10,6 +10,6 @@ import ec.com.cryptogateway.entity.TransactionEntity;
  * @author Christian
  *
  */
-public interface ITransactionRepository extends QuerydslPredicateExecutor<TransactionEntity>{
+public interface ITransactionRepository extends JpaRepository<TransactionEntity,Integer>{
 
 }

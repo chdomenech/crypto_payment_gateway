@@ -1,6 +1,6 @@
 package ec.com.cryptogateway.repository;
 
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import ec.com.cryptogateway.entity.WalletsEntity;
 
@@ -10,6 +10,6 @@ import ec.com.cryptogateway.entity.WalletsEntity;
  * @author Christian
  *
  */
-public interface IWalletsRepository extends QuerydslPredicateExecutor<WalletsEntity> {
+public interface IWalletsRepository extends JpaRepository<WalletsEntity, Integer> {
 
 }

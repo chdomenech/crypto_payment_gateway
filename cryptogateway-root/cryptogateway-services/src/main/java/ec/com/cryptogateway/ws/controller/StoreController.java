@@ -29,16 +29,8 @@ public class StoreController {
 	 
 	@GetMapping("getStore/{storeId}")
     public Mono<StoreEntity> getById(@PathVariable Integer storeId) {
-        return Mono.justOrEmpty(storeService.finById(storeId));
+        return Mono.justOrEmpty(storeService.encuentratodo(storeId));
     }
 
-	@GetMapping("count")
-    public Mono<Long> count() {
-        return Mono.justOrEmpty(storeService.count());
-    }
 	
-	@GetMapping("all")
-    public Mono<Iterable<StoreEntity>> all() {
-        return Mono.justOrEmpty(storeService.findAll());
-    }
 }

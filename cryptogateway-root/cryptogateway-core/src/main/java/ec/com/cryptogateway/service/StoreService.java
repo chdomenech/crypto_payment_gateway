@@ -17,28 +17,13 @@ import ec.com.cryptogateway.repository.IStoreRepository;
 @Service
 public class StoreService implements IStoreService{
     
-	@Autowired
+    @Autowired
     private IStoreRepository storeRepository;
 
-	@Override
-	public Boolean saveStore(StoreEntity store) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Optional<StoreEntity> encuentratodo(Integer id) {
+        return storeRepository.findById(id);
+    }
 
-	@Override
-	public Optional<StoreEntity> finById(Integer storeId) {
-		return storeRepository.findById(storeId);
-	}
-
-	@Override
-	public long count() {
-		return storeRepository.count();
-	}
 	
-	@Override
-	public Iterable<StoreEntity> findAll() {
-		return storeRepository.findAll();
-	}   
-    
 }

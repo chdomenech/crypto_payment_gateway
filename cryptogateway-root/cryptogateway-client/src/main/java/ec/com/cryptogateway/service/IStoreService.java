@@ -12,11 +12,5 @@ import ec.com.cryptogateway.entity.StoreEntity;
  */
 public interface IStoreService{
 	
-	public Boolean saveStore(StoreEntity store);
-	
-	public Optional<StoreEntity> finById(Integer storeId);
-	
-	public long count();
-	
-	public Iterable<StoreEntity> findAll();
+    Optional<StoreEntity> encuentratodo(Integer id);
 }
