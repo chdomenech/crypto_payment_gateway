@@ -1,5 +1,9 @@
 package ec.com.cryptogateway.service;
 
+import java.util.List;
+
+import ec.com.cryptogateway.entity.TransactionEntity;
+
 /**
  * TransactionService Service
  * 
@@ -8,4 +12,5 @@ package ec.com.cryptogateway.service;
  */
 public interface ITransactionService {
 
+    List<TransactionEntity> encuentratodo(); 
 }
