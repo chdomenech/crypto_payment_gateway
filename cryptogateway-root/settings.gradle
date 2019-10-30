@@ -1,0 +1,5 @@
+rootProject.name = 'cryptogateway-root'
+include 'cryptogateway-vo'
+include 'cryptogateway-client'
+include 'cryptogateway-core'
+include 'cryptogateway-services'

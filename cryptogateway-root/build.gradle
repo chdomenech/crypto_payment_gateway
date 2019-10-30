@@ -1,0 +1,27 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.6.RELEASE'
+}
+
+ext {
+    springBootVersion = '2.1.6.RELEASE'
+}
+
+allprojects {
+    group = 'gateway'
+    version = '1.0.0-SNAPSHOT'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+}
+
+subprojects {
+    apply plugin: 'io.spring.dependency-management'
+    dependencyManagement {
+        imports {
+            mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+        }
+    }
+}

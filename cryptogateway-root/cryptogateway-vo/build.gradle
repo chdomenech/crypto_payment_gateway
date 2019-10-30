@@ -1,0 +1,9 @@
+plugins {
+    id 'java'
+}
+dependencies {
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations'
+    compileOnly group: 'org.projectlombok', name: 'lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

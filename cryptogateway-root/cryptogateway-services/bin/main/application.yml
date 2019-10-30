@@ -1,0 +1,39 @@
+spring:
+  profiles.active: producction
+---
+spring:
+  profiles: develop
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:h2:mem:testdb
+    username: SA
+    password:
+    hikari:
+      connection-timeout: 60000
+      maximum-pool-size: 20
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-test-query: SELECT 1
+      pool-name: H2-POOL
+---
+spring:
+  profiles: producction
+  datasource:
+   type: com.zaxxer.hikari.HikariDataSource
+   url: jdbc:mysql://localhost/crypto_gateway?useSSL=false
+   username: root
+   password: root
+   hikari:
+    connection-timeout: 60000
+    maximum-pool-size: 20
+    idle-timeout: 600000
+    max-lifetime: 1800000
+    connection-test-query: SELECT 1
+    pool-name: MYSQL-POOL
+---
+logging:
+  level:
+    sql: debug
+    ROOT: info
+server:
+  port: 8081
