@@ -85,7 +85,6 @@ public class TransactionEntity implements Serializable{
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "transaction_status_id", referencedColumnName = "id", insertable = false, updatable = false)
-	private TransactionStatusEntity transactionStatus;
-	
+	private TransactionStatusEntity transactionStatus;	
 
 }
