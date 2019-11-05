@@ -1,6 +1,5 @@
 package cryptogateway.vo.response;
 
-import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

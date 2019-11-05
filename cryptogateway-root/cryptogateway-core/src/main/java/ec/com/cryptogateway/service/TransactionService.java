@@ -73,7 +73,6 @@ public class TransactionService implements ITransactionService{
 						 findById(CryptoGatewayConstants.STATUS_TRANSACTION_WAITING);
 				 
 				 WalletVO walletVO = generateWallet(dataTransaction);			 
-				 String qrCode = generateQRCode(walletVO.getWalletAddress());
 				 
 				 WalletsEntity walletEntity = new WalletsEntity();
 				 walletEntity.setPrivateKey(walletVO.getPrivateKey());
@@ -97,7 +96,6 @@ public class TransactionService implements ITransactionService{
 					 //transactionEntity.setTransactionStatus(transactionStatus.get());
 				 }						 
 				 
-				 transactionEntity.setQrCode(qrCode);
 				 transactionEntity.setBlockchain(dataTransaction.getBlockchain());
 				 transactionEntity.setCoinPrice(dataTransaction.getCryptoCurrencyPrice());
 				 transactionEntity.setCoinsAmount(dataTransaction.getCryptoCurrencyConversion());
@@ -109,7 +107,6 @@ public class TransactionService implements ITransactionService{
 				 transactionVO.setCoinLogo(dataTransaction.getCryptoCurrencyLogo());
 				 transactionVO.setCoinName(dataTransaction.getCryptoCurrencyName());
 				 transactionVO.setCoinsAmount(dataTransaction.getCryptoCurrencyConversion());
-				 transactionVO.setQrCode(qrCode);
 				 transactionVO.setWalletAddress(walletVO.getWalletAddress());
 				 transactionVO.setId(transactionEntity.getId());
 				 transactionVO.setCreationTime(transactionEntity.getCreationTime());
@@ -133,16 +130,6 @@ public class TransactionService implements ITransactionService{
 		return "";
 	}
 
-	/**
-	 * Generate qrCode
-	 * 
-	 * @param walletAddress
-	 * @return
-	 */
-	private String generateQRCode(String walletAddress) {
-		// TODO Auto-generated method stub
-		return "ADADADADA";
-	}
 
 	/**
 	 * Generate a Wallet with private key

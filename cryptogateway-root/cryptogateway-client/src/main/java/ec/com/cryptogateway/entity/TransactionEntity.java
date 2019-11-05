@@ -49,10 +49,7 @@ public class TransactionEntity implements Serializable{
     
     @Column(name = "creation_time")
 	private Date creationTime;
-    
-    @Column(name = "qr_code")
-	private String qrCode;
-    
+
     @Column(name = "cryptocurrency_id")
 	private Integer cryptoCurrencyId;
     
