@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StoreQueryVO {
+public class TransactionRegisterVO {	
 	
 	private String storeUI;
 	private BigDecimal totalPayment;
-	private String coinId;
-
+	private String coindId;
+	private BigDecimal tokensAmount;	
 
 }

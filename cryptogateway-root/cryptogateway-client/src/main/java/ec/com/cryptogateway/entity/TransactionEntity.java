@@ -39,8 +39,8 @@ public class TransactionEntity implements Serializable{
 
     private static final long serialVersionUID = -7964316296306954593L;
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")  
 	private Integer id;	
     
@@ -70,6 +70,9 @@ public class TransactionEntity implements Serializable{
     
     @Column(name = "total_payment")
 	private BigDecimal totalPayment;
+    
+    @Column(name = "blockchain")
+   	private String blockchain;
 	
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wallet_id", referencedColumnName = "id", insertable = false, updatable = false)

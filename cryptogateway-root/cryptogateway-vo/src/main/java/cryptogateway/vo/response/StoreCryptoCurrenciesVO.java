@@ -25,6 +25,8 @@ public class StoreCryptoCurrenciesVO {
 	private BigDecimal cryptoCurrencyPrice;
 	private BigDecimal cryptoCurrencyConversion;
 	private BigDecimal totalPayment;	
-	private String coindId;
-	private int id;	
+	private String coinId;
+	private String blockchain;
+	private Integer idCoin;
+	private Integer idStore;
 }

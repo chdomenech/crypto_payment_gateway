@@ -13,17 +13,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransactionVO {
-	
  
 	private Integer id;	
-	private Integer walletId;
+	private String transactionId;
+	private String walletAddress;
 	private Date creationTime;
 	private String qrCode;
-	private Integer cryptoCurrencyId;
-	private Integer storeId;
-    private Integer transactionStatusId;
 	private BigDecimal coinsAmount;
-	private BigDecimal coinPrice;
-	private BigDecimal totalPayment;
-
+	private String coinId;
+	private String coinName;
+	private String coinLogo;
 }

@@ -35,14 +35,14 @@ public class CryptoCurrencyEntity implements Serializable{
 	private static final long serialVersionUID = -4124056497641184600L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")    
 	private Integer id;
     
     @Column(name = "smart_contract")
 	private String smartContract;
     
-    @Column(name = "coind_id")
+    @Column(name = "coin_id")
 	private String coinId;
     
     @Column(name = "api_url")
@@ -54,8 +54,11 @@ public class CryptoCurrencyEntity implements Serializable{
     @Column(name = "api_url_2")
 	private String apiUrl2;
     
-    @Column(name = "is_token_ethereum ")
+    @Column(name = "is_token_ethereum")
 	private Boolean isTokenEthereum;
+    
+    @Column(name = "blockchain")
+	private String blockchain;
 	
     @Column(name = "status ")
     private Boolean status;

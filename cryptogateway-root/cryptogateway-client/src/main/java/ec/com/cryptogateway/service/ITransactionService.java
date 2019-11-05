@@ -1,5 +1,8 @@
 package ec.com.cryptogateway.service;
 
+import cryptogateway.vo.request.StoreQueryVO;
+import cryptogateway.vo.response.TransactionVO;
+
 /**
  * TransactionService Service
  * 
@@ -7,5 +10,12 @@ package ec.com.cryptogateway.service;
  *
  */
 public interface ITransactionService {
+	
+	/**
+	 * 
+	 * @param transactionVO
+	 * @return
+	 */
+	TransactionVO saveTransaction(StoreQueryVO storeQueryVO);
 
 }

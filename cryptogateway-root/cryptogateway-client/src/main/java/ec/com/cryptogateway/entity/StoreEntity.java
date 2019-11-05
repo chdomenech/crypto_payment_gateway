@@ -37,7 +37,7 @@ public class StoreEntity implements Serializable{
 	private static final long serialVersionUID = 8237919227137676270L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")   
 	private Integer id;
     

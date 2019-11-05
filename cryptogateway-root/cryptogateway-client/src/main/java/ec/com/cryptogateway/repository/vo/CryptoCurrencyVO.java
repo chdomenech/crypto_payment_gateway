@@ -11,6 +11,7 @@ public interface CryptoCurrencyVO {
 	String getApi1();
 	String getApi2();
 	String getApi3();
-	Integer getId();
-
+	Integer getIdCoin();
+	Integer getIdStore();
+	String getBlockchain();
 }

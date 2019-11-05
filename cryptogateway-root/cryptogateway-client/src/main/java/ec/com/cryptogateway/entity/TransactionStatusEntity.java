@@ -35,7 +35,7 @@ public class TransactionStatusEntity implements Serializable{
 	private static final long serialVersionUID = -7033367280813643673L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")  
 	private Integer id;
     

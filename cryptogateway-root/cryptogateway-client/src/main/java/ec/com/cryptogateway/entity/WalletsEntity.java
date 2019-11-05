@@ -39,7 +39,7 @@ public class WalletsEntity implements Serializable{
 	private static final long serialVersionUID = 482985440037322613L;
 	
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")   
 	private Integer id;
     
@@ -51,6 +51,9 @@ public class WalletsEntity implements Serializable{
 	
     @Column(name = "creation_date")
 	private Date creationDate;
+    
+    @Column(name = "blockchain")
+	private String blockchain;
 	
     @Column(name = "store_id")
 	private Integer storeId;

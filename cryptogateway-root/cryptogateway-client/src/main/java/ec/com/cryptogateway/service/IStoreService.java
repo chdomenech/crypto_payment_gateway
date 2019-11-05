@@ -15,7 +15,17 @@ import ec.com.cryptogateway.entity.StoreEntity;
  */
 public interface IStoreService{
 	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
 	Optional<StoreEntity> findStoreByID(Integer id);
 	
+	/**
+	 * 
+	 * @param storeQueryVO
+	 * @return
+	 */
     List<StoreCryptoCurrenciesVO> findCrytptoCurrenciesForUIstore(StoreQueryVO storeQueryVO);
 }
