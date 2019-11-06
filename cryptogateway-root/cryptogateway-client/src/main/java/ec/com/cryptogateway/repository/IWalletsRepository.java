@@ -1,7 +1,7 @@
 package ec.com.cryptogateway.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
+import cryptogateway.vo.response.WalletVO;
+import ec.com.cryptogateway.base.IQueryDslBaseRepository;
 import ec.com.cryptogateway.entity.WalletsEntity;
 
 /**
@@ -10,6 +10,12 @@ import ec.com.cryptogateway.entity.WalletsEntity;
  * @author Christian
  *
  */
-public interface IWalletsRepository extends JpaRepository<WalletsEntity, Integer> {
+public interface IWalletsRepository extends IQueryDslBaseRepository<WalletsEntity> {
 
+    /**
+     * 
+     * @param id
+     * @return
+     */
+   WalletVO findAllWalletsByIdStore(Integer id);
 }

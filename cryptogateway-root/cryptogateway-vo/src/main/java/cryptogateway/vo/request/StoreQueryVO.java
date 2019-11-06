@@ -16,6 +16,7 @@ public class StoreQueryVO {
 	private String storeUI;
 	private BigDecimal totalPayment;
 	private String coinId;
+	private Integer id;
 
 
 }
