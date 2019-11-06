@@ -83,7 +83,7 @@ public class StoreService implements IStoreService{
 
 		Collection<CryptoCurrencyVO> apis = null;
 		
-		if(StringUtils.isEmpty(storeQueryVO.getStoreUI())) {
+		if(StringUtils.isEmpty(storeQueryVO.getCoinId())) {
 			apis = cryptoCurrencyStoreRepository.getCryptoCurrencysApis(storeQueryVO.getStoreUI());	
 		}else {
 			apis = cryptoCurrencyStoreRepository.getCryptoCurrencysApisByCoinID(storeQueryVO.getStoreUI(),storeQueryVO.getCoinId());			

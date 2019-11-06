@@ -1,8 +1,10 @@
 package ec.com.cryptogateway.service;
 
+import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.transaction.Transactional;
 
@@ -54,6 +56,28 @@ public class TransactionService implements ITransactionService{
 	
 	@Autowired
 	ITransactionStatusRepository transactionStatusRepository;
+	
+	private static char[] VALID_CHARACTERS =
+		    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456879".toCharArray();
+
+	/**
+	 * 
+	 * @param numChars
+	 * @return
+	 */
+	public static String createTransactionID(int numChars) {
+	    SecureRandom srand = new SecureRandom();
+	    Random rand = new Random();
+	    char[] buff = new char[numChars];
+
+	    for (int i = 0; i < numChars; ++i) {
+	      if ((i % 10) == 0) {
+	          rand.setSeed(srand.nextLong());
+	      }
+	      buff[i] = VALID_CHARACTERS[rand.nextInt(VALID_CHARACTERS.length)];
+	    }
+	    return new String(buff);
+	}
 
 	@Override
 	public TransactionVO saveTransaction(StoreQueryVO storeQueryVO) {	
@@ -78,22 +102,20 @@ public class TransactionService implements ITransactionService{
 				 walletEntity.setPrivateKey(walletVO.getPrivateKey());
 				 walletEntity.setWallet(walletVO.getWalletAddress());
 				 walletEntity.setStoreId(storeEntity.get().getId());
-				 //walletEntity.setStore(storeEntity.get());
 				 walletEntity.setBlockchain(dataTransaction.getBlockchain());
+				 walletEntity.setPublicKey(walletVO.getPublicKey());
 				 walletsRepository.save(walletEntity);
 				 
 				 TransactionEntity transactionEntity = new TransactionEntity();
-				 //transactionEntity.setWallet(walletEntity);
+				 String transactionID = createTransactionID(20).toUpperCase();
 				 transactionEntity.setWalletId(walletEntity.getId());
-				 //transactionEntity.setStore(storeEntity.get());	
+				 transactionEntity.setTransactionId(transactionID);
 				 transactionEntity.setStoreId(storeEntity.get().getId());
-				 if(cryptoCurrency.isPresent()) {
-					 //transactionEntity.setCryptoCurrency(cryptoCurrency.get());	
+				 if(cryptoCurrency.isPresent()) {	
 					 transactionEntity.setCryptoCurrencyId(cryptoCurrency.get().getId());
 				 }
 				 if(transactionStatus.isPresent()) {
 					 transactionEntity.setTransactionStatusId(transactionStatus.get().getId());
-					 //transactionEntity.setTransactionStatus(transactionStatus.get());
 				 }						 
 				 
 				 transactionEntity.setBlockchain(dataTransaction.getBlockchain());
@@ -110,24 +132,12 @@ public class TransactionService implements ITransactionService{
 				 transactionVO.setWalletAddress(walletVO.getWalletAddress());
 				 transactionVO.setId(transactionEntity.getId());
 				 transactionVO.setCreationTime(transactionEntity.getCreationTime());
-				 transactionVO.setTransactionId(createTransactionID(transactionEntity.getCreationTime(), walletVO.getWalletAddress()));
+				 transactionVO.setTransactionId(transactionID);
 				 
 			 }
 		 }
 		 
 		 return transactionVO;		
-	}
-	
-	/**
-	 * Transaction creation
-	 * 
-	 * @param creationTime
-	 * @param walletAddres
-	 * @return
-	 */
-	private String createTransactionID(Date creationTime, String walletAddres) {
-		
-		return "";
 	}
 
 
@@ -139,18 +149,13 @@ public class TransactionService implements ITransactionService{
 	 * @return
 	 */
 	private WalletVO generateWallet(StoreCryptoCurrenciesVO dataTransaction) {
-		/*WalletVO walletVO = null;
+		WalletVO walletVO = null;
 		
 		if(dataTransaction.getBlockchain().equals(CryptoGatewayConstants.ETHEREUM_BLOCKCHAIN)){
 			 walletVO = ethereumService.generateWalletEthereum();		 
-		 }*/
+		 }
 		
-		WalletVO walletVO = new WalletVO();
-		walletVO.setBlockchain(CryptoGatewayConstants.ETHEREUM_BLOCKCHAIN);
-		walletVO.setPrivateKey("ABC");
-		walletVO.setWalletAddress("0x123");
-		
-		return walletVO;
+		return walletVO;		
 	}
 
 

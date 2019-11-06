@@ -18,7 +18,6 @@ public class TransactionVO {
 	private String transactionId;
 	private String walletAddress;
 	private Date creationTime;
-	private String qrCode;
 	private BigDecimal coinsAmount;
 	private String coinId;
 	private String coinName;

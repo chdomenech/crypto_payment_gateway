@@ -48,6 +48,9 @@ public class WalletsEntity implements Serializable{
 	
     @Column(name = "private_key")
 	private String privateKey;
+    
+    @Column(name = "public_key")
+	private String publicKey;
 	
     @Column(name = "creation_date")
 	private Date creationDate;

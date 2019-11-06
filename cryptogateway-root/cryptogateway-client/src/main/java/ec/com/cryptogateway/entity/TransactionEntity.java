@@ -47,6 +47,9 @@ public class TransactionEntity implements Serializable{
     @Column(name = "wallet_id")
 	private Integer walletId;
     
+    @Column(name = "transaction_id")
+	private String transactionId;
+    
     @Column(name = "creation_time")
 	private Date creationTime;
 
