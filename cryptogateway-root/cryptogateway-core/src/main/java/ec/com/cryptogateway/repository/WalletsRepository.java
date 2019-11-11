@@ -14,7 +14,7 @@ import ec.com.cryptogateway.entity.WalletsEntity;
 
 @Lazy
 @Repository
-public class WalletsRepository  extends JPAQueryDslBaseRepository<WalletsEntity> implements IWalletsRepository {
+public class WalletsRepository extends JPAQueryDslBaseRepository<WalletsEntity> implements IWalletsRepository {
 
     public WalletsRepository() {
         super(WalletsEntity.class);
@@ -24,7 +24,8 @@ public class WalletsRepository  extends JPAQueryDslBaseRepository<WalletsEntity>
     public WalletVO findAllWalletsByIdStore(Integer id) {
         QWalletsEntity qWalletsEntity = QWalletsEntity.walletsEntity;
         
-        JPQLQuery<WalletVO> query = from(qWalletsEntity).select(Projections.bean(WalletVO.class, qWalletsEntity.privateKey, qWalletsEntity.publicKey, qWalletsEntity.blockchain, qWalletsEntity.wallet.as("walletAddress")));
+        JPQLQuery<WalletVO> query = from(qWalletsEntity).select(Projections.bean(WalletVO.class, 
+                qWalletsEntity.privateKey, qWalletsEntity.publicKey, qWalletsEntity.blockchain, qWalletsEntity.wallet.as("walletAddress")));
         BooleanBuilder where = new BooleanBuilder();
         where.and(qWalletsEntity.storeId.eq(id));
         query.where(where);

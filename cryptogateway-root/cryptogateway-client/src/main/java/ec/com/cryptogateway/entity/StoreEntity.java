@@ -61,4 +61,5 @@ public class StoreEntity implements Serializable{
     
     @Column(name = "logo")
 	private String logo;
+
 }
