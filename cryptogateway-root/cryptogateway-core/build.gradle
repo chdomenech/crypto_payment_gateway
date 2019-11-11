@@ -3,7 +3,8 @@ plugins {
 }
 
 dependencies {
-	compile project(":cryptogateway-client")
+	//compile project(":cryptogateway-client")
+	compile('ec.com.cryptogateway:cryptogateway-client:1.0.0-SNAPSHOT')
 	compile group: 'org.projectlombok', name: 'lombok'
 	compile group: 'org.hibernate', name: 'hibernate-entitymanager'
 	compile group: 'org.springframework', name: 'spring-web'

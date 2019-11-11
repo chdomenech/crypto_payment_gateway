@@ -7,7 +7,7 @@ ext {
 }
 
 allprojects {
-    group = 'gateway'
+    group = 'ec.com.cryptogateway'
     version = '1.0.0-SNAPSHOT'
 
     repositories {
@@ -18,7 +18,16 @@ allprojects {
 }
 
 subprojects {
+    apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'maven'    
+    
+    compileJava.options.encoding = 'UTF-8'
+		tasks.withType(JavaCompile) {
+			options.encoding = 'UTF-8'
+	}
+    
     dependencyManagement {
         imports {
             mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
