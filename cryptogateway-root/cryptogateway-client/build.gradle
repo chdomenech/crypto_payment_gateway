@@ -1,7 +1,4 @@
-plugins {
-    id 'java'
-}
-
+apply plugin:'idea'
 
 sourceSets.main.java.srcDirs += "src/querydsl/java"
 sourceSets {
@@ -49,7 +46,8 @@ dependencies {
     compile("javax.persistence:javax.persistence-api")
     compile 'org.springframework.data:spring-data-commons'
     compile 'org.springframework:spring-webflux'
-	compile group: 'org.projectlombok', name: 'lombok'
+    compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
    	compile group: 'org.springframework.data', name: 'spring-data-jpa'
 	compile group: 'com.querydsl', name: 'querydsl-jpa'
 	compile group: 'javax.annotation', name: 'javax.annotation-api'

@@ -6,9 +6,10 @@ buildscript {
         classpath "gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.22.1"
     }
 }
+
 plugins {
     id 'org.springframework.boot'
-    id 'java'
+    id 'war'
 }
 configurations {
     developmentOnly
