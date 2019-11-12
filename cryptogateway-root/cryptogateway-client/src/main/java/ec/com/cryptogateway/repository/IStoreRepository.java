@@ -1,8 +1,10 @@
 package ec.com.cryptogateway.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import cryptogateway.vo.request.CredentialsVO;
+import cryptogateway.vo.response.StoreVO;
+import ec.com.cryptogateway.base.IQueryDslBaseRepository;
 import ec.com.cryptogateway.entity.StoreEntity;
 
 /**
@@ -12,6 +14,14 @@ import ec.com.cryptogateway.entity.StoreEntity;
  *
  */
 @Transactional(readOnly = true) 
-public interface IStoreRepository extends JpaRepository<StoreEntity, Integer>{
+public interface IStoreRepository  extends IQueryDslBaseRepository<StoreEntity> {
 
+	/**
+	 * Find store by credentials
+	 * 
+	 * @param credentialsVO
+	 * @return
+	 */
+	StoreVO  findStoreByCredentials(CredentialsVO credentialsVO);
+	
 }

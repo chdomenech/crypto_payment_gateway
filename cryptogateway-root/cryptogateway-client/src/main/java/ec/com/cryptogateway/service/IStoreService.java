@@ -1,11 +1,14 @@
 package ec.com.cryptogateway.service;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
+import cryptogateway.vo.request.CredentialsVO;
+import cryptogateway.vo.request.CryptoCurrencyVO;
 import cryptogateway.vo.request.StoreQueryVO;
+import cryptogateway.vo.response.ResponseVO;
 import cryptogateway.vo.response.StoreCryptoCurrenciesVO;
-import ec.com.cryptogateway.entity.StoreEntity;
+import cryptogateway.vo.response.StoreVO;
 
 /**
  * Store Service
@@ -15,17 +18,60 @@ import ec.com.cryptogateway.entity.StoreEntity;
  */
 public interface IStoreService{
 	
-	/**
-	 * 
-	 * @param id
-	 * @return
-	 */
-	Optional<StoreEntity> findStoreByID(Integer id);
 	
 	/**
+	 * List all cryptocurrencys of store
 	 * 
 	 * @param storeQueryVO
 	 * @return
 	 */
-    List<StoreCryptoCurrenciesVO> findCrytptoCurrenciesForUIstore(StoreQueryVO storeQueryVO);
+    List<StoreCryptoCurrenciesVO> findCoinsForUIstore(StoreQueryVO storeQueryVO);
+    
+    /**
+     * Find a user by credentials
+     * 
+     * @param credentialsVO
+     * @return
+     */
+    StoreVO findUserByCredentials(CredentialsVO credentialsVO);
+    
+    /**
+     * Save the store
+     * 
+     * @param storeVO
+     */
+    ResponseVO saveStore(StoreVO storeVO);
+    
+    /**
+     * Resend the password
+     * 
+     * @param credentialsVO
+     * @return
+     */
+    ResponseVO resendPassword(CredentialsVO credentialsVO);
+    
+    /**
+     * Save the password
+     * 
+     * @param credentialsVO
+     * @return
+     */
+    ResponseVO savePassword(CredentialsVO credentialsVO);
+    
+    
+    /**
+     * Save configuration of coins for the store
+     * 
+     * @param coins
+     * @return
+     */
+    ResponseVO saveCoinsConfiguration(Collection<CryptoCurrencyVO> coins);
+    
+    /**
+     * Update the store
+     * 
+     * @param coins
+     * @return
+     */
+    ResponseVO updateStore(StoreVO storeVO);
 }

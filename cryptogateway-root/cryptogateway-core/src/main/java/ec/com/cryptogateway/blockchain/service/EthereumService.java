@@ -30,8 +30,8 @@ public class EthereumService implements IEthereumService{
 	 * 
 	 */
 	@Override
-	public WalletVO generateWalletEthereum() {
-		
+	public WalletVO createWallet() {
+
 		WalletVO walletVO = null;
 		
 		ECKeyPair keyPair;
@@ -62,6 +62,20 @@ public class EthereumService implements IEthereumService{
 		}
 		
 		return walletVO;
+	}
+
+
+
+	@Override
+	public void checkTransaction() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendCoins() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
