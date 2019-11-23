@@ -90,7 +90,7 @@ public class TransactionService implements ITransactionService{
 				 walletsRepository.save(walletEntity);
 				 
 				 TransactionEntity transactionEntity = new TransactionEntity();
-				 String transactionID = CoreUtils.createTransactionID(23).toUpperCase();
+				 String transactionID = CoreUtils.createIdentifierRandom(23).toUpperCase();
 				 transactionEntity.setWalletId(walletEntity.getId());
 				 transactionEntity.setTransactionId(transactionID);
 				 transactionEntity.setStoreId(storeEntity.getId());

@@ -35,7 +35,7 @@ public class CoreUtils {
 	 * @param numChars
 	 * @return
 	 */
-	public static String createTransactionID(int numChars) {
+	public static String createIdentifierRandom(int numChars) {
 	    SecureRandom srand = new SecureRandom();
 	    Random rand = new Random();
 	    char[] buff = new char[numChars];

@@ -24,6 +24,7 @@ import ec.com.cryptogateway.repository.ICryptoCurrencyStoreRepository;
 import ec.com.cryptogateway.repository.IStoreRepository;
 import ec.com.cryptogateway.utils.ApisUtil;
 import ec.com.cryptogateway.utils.CryptoGatewayConstants;
+import ec.cryptogateway.utils.AES256;
 import ec.cryptogateway.utils.CoreUtils;
 
 /**
@@ -87,23 +88,20 @@ public class StoreService implements IStoreService{
 	 */
 	@Override
 	public ResponseVO saveStore(StoreSaveVO storeSaveVO) {
-		
-		
-		//valida email, usuario, tamaño de password, tamaño de nombre de tienda
 				
 		StoreEntity storeEntity = new StoreEntity();
 		storeEntity.setCreationDate(new Date());
 		storeEntity.setEmail(storeSaveVO.getEmail());
 		storeEntity.setUser(storeSaveVO.getUser());
-		storeEntity.setPassword(storeSaveVO.getPassword());
+		storeEntity.setPassword(AES256.encrypt(storeSaveVO.getPassword(), AES256.SECRET_KEY));
 		storeEntity.setStoreName(storeSaveVO.getStoreName());
-		storeEntity.setStoreUI(CoreUtils.createTransactionID(12).toUpperCase());			
+		storeEntity.setStoreUI(CoreUtils.createIdentifierRandom(12).toUpperCase());			
 		storeRepository.save(storeEntity);
 		
-		//Send email de confirmation		
-		try {		
-			return CoreUtils.getResponseVO(CryptoGatewayConstants.MESSAGE_SUCCESSFULL_STORE_SAVED, CryptoGatewayConstants.STATUS_SUCCESSFULL);	
+		//Send email de confirmation
 		
+		try {		
+			return CoreUtils.getResponseVO(CryptoGatewayConstants.MESSAGE_SUCCESSFULL_STORE_SAVED, CryptoGatewayConstants.STATUS_SUCCESSFULL);			
 		}catch (Exception e) {
 			return CoreUtils.getResponseVO(e.getMessage(), CryptoGatewayConstants.STATUS_ERROR);	
 		}
