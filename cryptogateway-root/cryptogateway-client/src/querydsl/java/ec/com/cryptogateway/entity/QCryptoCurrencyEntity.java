@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,6 +18,8 @@ public class QCryptoCurrencyEntity extends EntityPathBase<CryptoCurrencyEntity> 
 
     private static final long serialVersionUID = 1135206712L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QCryptoCurrencyEntity cryptoCurrencyEntity = new QCryptoCurrencyEntity("cryptoCurrencyEntity");
 
     public final StringPath apiUrl = createString("apiUrl");
@@ -25,7 +28,9 @@ public class QCryptoCurrencyEntity extends EntityPathBase<CryptoCurrencyEntity> 
 
     public final StringPath apiUrl2 = createString("apiUrl2");
 
-    public final StringPath blockchain = createString("blockchain");
+    public final QBlockchainEntity blockchain;
+
+    public final NumberPath<Integer> blockchainId = createNumber("blockchainId", Integer.class);
 
     public final StringPath coinId = createString("coinId");
 
@@ -38,15 +43,24 @@ public class QCryptoCurrencyEntity extends EntityPathBase<CryptoCurrencyEntity> 
     public final BooleanPath status = createBoolean("status");
 
     public QCryptoCurrencyEntity(String variable) {
-        super(CryptoCurrencyEntity.class, forVariable(variable));
+        this(CryptoCurrencyEntity.class, forVariable(variable), INITS);
     }
 
     public QCryptoCurrencyEntity(Path<? extends CryptoCurrencyEntity> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QCryptoCurrencyEntity(PathMetadata metadata) {
-        super(CryptoCurrencyEntity.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QCryptoCurrencyEntity(PathMetadata metadata, PathInits inits) {
+        this(CryptoCurrencyEntity.class, metadata, inits);
+    }
+
+    public QCryptoCurrencyEntity(Class<? extends CryptoCurrencyEntity> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.blockchain = inits.isInitialized("blockchain") ? new QBlockchainEntity(forProperty("blockchain")) : null;
     }
 
 }

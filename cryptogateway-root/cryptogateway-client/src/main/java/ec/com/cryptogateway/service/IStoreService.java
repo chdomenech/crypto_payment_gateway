@@ -4,8 +4,9 @@ import java.util.Collection;
 import java.util.List;
 
 import cryptogateway.vo.request.CredentialsVO;
-import cryptogateway.vo.request.CryptoCurrencyVO;
+import cryptogateway.vo.response.CryptoCurrencyVO;
 import cryptogateway.vo.request.StoreQueryVO;
+import cryptogateway.vo.request.StoreSaveVO;
 import cryptogateway.vo.response.ResponseVO;
 import cryptogateway.vo.response.StoreCryptoCurrenciesVO;
 import cryptogateway.vo.response.StoreVO;
@@ -33,14 +34,14 @@ public interface IStoreService{
      * @param credentialsVO
      * @return
      */
-    StoreVO findUserByCredentials(CredentialsVO credentialsVO);
+    ResponseVO findUserByCredentials(CredentialsVO credentialsVO);
     
     /**
      * Save the store
      * 
-     * @param storeVO
+     * @param storeSaveVO
      */
-    ResponseVO saveStore(StoreVO storeVO);
+    ResponseVO saveStore(StoreSaveVO storeSaveVO);
     
     /**
      * Resend the password

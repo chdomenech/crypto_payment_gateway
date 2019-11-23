@@ -2,11 +2,12 @@ package ec.com.cryptogateway.repository;
 
 import java.util.Collection;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
-import ec.com.cryptogateway.entity.CryptoCurrencyEntity;
-import ec.com.cryptogateway.repository.vo.CryptoCurrencyVO;
+import cryptogateway.vo.request.StoreQueryVO;
+import cryptogateway.vo.response.CryptoCurrencyVO;
+import ec.com.cryptogateway.base.IQueryDslBaseRepository;
+import ec.com.cryptogateway.entity.CryptoCurrencyStoreEntity;
 
 /**
  * CryptoCurrencyStore Repository
@@ -14,19 +15,15 @@ import ec.com.cryptogateway.repository.vo.CryptoCurrencyVO;
  * @author Christian
  *
  */
-public interface ICryptoCurrencyStoreRepository  extends JpaRepository<CryptoCurrencyEntity, Integer> {
+@Transactional(readOnly = true) 
+public interface ICryptoCurrencyStoreRepository extends IQueryDslBaseRepository<CryptoCurrencyStoreEntity>{
 
-	@Query(value = "SELECT c.coin_id as coinId, c.blockchain as blockchain, c.api_url as api1, c.api_url_1 as api2, " + 
-			"c.api_url_2 as api3, c.id as idCoin, cs.store_id as idStore FROM cryptocurrency_store cs " + 
-			"inner join store st on cs.store_id= st.id " + 
-			"inner join cryptocurrency c on cs.cryptocurrency_id= c.id " + 
-			"where cs.status=1 and st.store_ui = ?1", nativeQuery = true)
-	Collection<CryptoCurrencyVO> getCryptoCurrencysApis(String storeUI);
+	/**
+	 * Get all cryptocurrencies configured by the store
+	 * 
+	 * @param storeQueryVO
+	 * @return
+	 */
+	Collection<CryptoCurrencyVO> getCryptoCurrencyStore(StoreQueryVO storeQueryVO);
 	
-	@Query(value = "SELECT c.coin_id as coinId, c.blockchain as blockchain, c.api_url as api1, c.api_url_1 as api2, " + 
-			"c.api_url_2 as api3, c.id as idCoin, cs.store_id as idStore FROM cryptocurrency_store cs " + 
-			"inner join store st on cs.store_id= st.id " + 
-			"inner join cryptocurrency c on cs.cryptocurrency_id= c.id " + 
-			"where cs.status=1 and st.store_ui = ?1 and c.coin_id = ?2", nativeQuery = true)
-	Collection<CryptoCurrencyVO> getCryptoCurrencysApisByCoinID(String storeUI, String coinId);
 }

@@ -21,8 +21,8 @@ import lombok.extern.slf4j.Slf4j;
  * @author Christian
  *
  */
-@Slf4j
 @Service
+@Slf4j
 public class EthereumService implements IEthereumService{
 
 	/**
@@ -43,22 +43,21 @@ public class EthereumService implements IEthereumService{
 			BigInteger privateKey = keyPair.getPrivateKey();
 			String privateKeyHex = Numeric.toHexStringWithPrefix(privateKey);
 			
-			// create credentials + address from private/public key pair
 			Credentials credentials = Credentials.create(new ECKeyPair(privateKey, publicKey));
 			String address = credentials.getAddress();
 			
 			walletVO = new WalletVO();
 			walletVO.setPrivateKey(privateKeyHex);
 			walletVO.setWalletAddress(address);
-			walletVO.setBlockchain(CryptoGatewayConstants.ETHEREUM_BLOCKCHAIN);
+			walletVO.setBlockchainId(CryptoGatewayConstants.ETHEREUM_BLOCKCHAIN);
 			walletVO.setPublicKey(publicKeyHex);
 			
 		} catch (InvalidAlgorithmParameterException e) {
-			log.error(e.getMessage());
+			log.error("Error InvalidAlgorithmParameterException {}",e.getMessage());			
 		} catch (NoSuchAlgorithmException e) {
-			log.error(e.getMessage());
+			log.error("Error NoSuchAlgorithmException {}",e.getMessage());			
 		} catch (NoSuchProviderException e) {
-			log.error(e.getMessage());
+			log.error("Error NoSuchProviderException {}",e.getMessage());			
 		}
 		
 		return walletVO;

@@ -36,4 +36,4 @@ logging:
     sql: debug
     ROOT: info
 server:
-  port: 8083
+  port: 8080

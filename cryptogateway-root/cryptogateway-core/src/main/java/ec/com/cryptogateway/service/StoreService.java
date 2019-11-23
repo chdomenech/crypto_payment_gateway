@@ -1,28 +1,30 @@
 package ec.com.cryptogateway.service;
 
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.Date;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import cryptogateway.vo.request.CredentialsVO;
 import cryptogateway.vo.request.StoreQueryVO;
-import cryptogateway.vo.response.CoingeckoApiVO;
+import cryptogateway.vo.request.StoreSaveVO;
+import cryptogateway.vo.response.CryptoCurrencyVO;
 import cryptogateway.vo.response.ResponseVO;
 import cryptogateway.vo.response.StoreCryptoCurrenciesVO;
 import cryptogateway.vo.response.StoreVO;
+import ec.com.cryptogateway.entity.StoreEntity;
 import ec.com.cryptogateway.repository.ICryptoCurrencyStoreRepository;
 import ec.com.cryptogateway.repository.IStoreRepository;
-import ec.com.cryptogateway.repository.vo.CryptoCurrencyVO;
 import ec.com.cryptogateway.utils.ApisUtil;
+import ec.com.cryptogateway.utils.CryptoGatewayConstants;
+import ec.cryptogateway.utils.CoreUtils;
 
 /**
  * Store Service
@@ -30,6 +32,7 @@ import ec.com.cryptogateway.utils.ApisUtil;
  * @author Christian
  *
  */
+@Transactional
 @Service
 public class StoreService implements IStoreService{
     
@@ -42,83 +45,68 @@ public class StoreService implements IStoreService{
    
     /**
      * Find all information of the cryptoCurrency
+     * of the stores
      * 
      */
 	@Override
 	public List<StoreCryptoCurrenciesVO> findCoinsForUIstore(StoreQueryVO storeQueryVO) {
 
-		Collection<CryptoCurrencyVO> apis = null;
-		
-		if(StringUtils.isEmpty(storeQueryVO.getCoinId())) {
-			apis = cryptoCurrencyStoreRepository.getCryptoCurrencysApis(storeQueryVO.getStoreUI());	
-		}else {
-			apis = cryptoCurrencyStoreRepository.getCryptoCurrencysApisByCoinID(storeQueryVO.getStoreUI(),storeQueryVO.getCoinId());			
-		}
-		 	
-		if(!CollectionUtils.isEmpty(apis)){
-			ArrayList<StoreCryptoCurrenciesVO> cryptos = new ArrayList<>();
-			apis.forEach(data -> {
-				CoingeckoApiVO coingeckoApiVO= ApisUtil.getCryptoCurrencyInfo(data.getApi1()); 
-				if(coingeckoApiVO!=null) {
-					coinGeckoApiInformation(coingeckoApiVO, data, storeQueryVO, cryptos);
-				}
+		ArrayList<StoreCryptoCurrenciesVO> storeCryptoCurrencies= new ArrayList<>();
+		Collection<CryptoCurrencyVO> cryptoCurrency = cryptoCurrencyStoreRepository.getCryptoCurrencyStore(storeQueryVO);			 	
+		if(!CollectionUtils.isEmpty(cryptoCurrency)){
+			cryptoCurrency.forEach(data -> {
+				ApisUtil.getApiInformation(data, storeQueryVO, storeCryptoCurrencies);
 			});	
-			
-			return cryptos;
-		}
-		
-		return null;
+		}		
+		return storeCryptoCurrencies;
 	}
 	
+	
+
 	/**
-	 * Method for return the coingecko api information
+	 * Find user by credentials
 	 * 
-	 * @param coingeckoApiVO
-	 * @param data
-	 * @param storeQueryVO
-	 * @param cryptos
 	 */
-	public void coinGeckoApiInformation(CoingeckoApiVO coingeckoApiVO, CryptoCurrencyVO data, StoreQueryVO storeQueryVO, 
-			ArrayList<StoreCryptoCurrenciesVO> cryptos ) {
-		
-		StoreCryptoCurrenciesVO storeCryptoCurrencysVO = new StoreCryptoCurrenciesVO();
-		storeCryptoCurrencysVO.setCryptoCurrencyName(coingeckoApiVO.getName());
-		storeCryptoCurrencysVO.setCoinId(data.getCoinId());
-		storeCryptoCurrencysVO.setIdCoin(data.getIdCoin());
-		storeCryptoCurrencysVO.setCryptoCurrencyLogo(coingeckoApiVO.getImage().get("thumb"));
-		storeCryptoCurrencysVO.setTotalPayment(storeQueryVO.getTotalPayment());
-		storeCryptoCurrencysVO.setBlockchain(data.getBlockchain());
-		storeCryptoCurrencysVO.setIdStore(data.getIdStore());
-		
-		if(coingeckoApiVO.getMarketData()!=null) {			
-			
-			@SuppressWarnings("unchecked")
-			LinkedHashMap<String, Double> marketPrice = 
-			(LinkedHashMap<String, Double>) coingeckoApiVO.getMarketData().get("current_price");
-			
-			Double priceUSD = marketPrice.get("usd");
-			BigDecimal priceCoin = new BigDecimal(priceUSD).setScale(2, RoundingMode.HALF_DOWN);						
-			storeCryptoCurrencysVO.setCryptoCurrencyPrice(priceCoin);
-			
-			BigDecimal total = storeQueryVO.getTotalPayment().divide(priceCoin, 4, RoundingMode.HALF_DOWN);
-			storeCryptoCurrencysVO.setCryptoCurrencyConversion(total);
+	@Override
+	public ResponseVO findUserByCredentials(CredentialsVO credentialsVO) {	
+		StoreVO storeVO = storeRepository.findStoreByCredentials(credentialsVO);		
+		ResponseVO responseVO;
+		if(storeVO!=null) {			
+			responseVO = CoreUtils.getResponseVO(CryptoGatewayConstants.MESSAGE_SUCCESSFULL_USER_FOUND, CryptoGatewayConstants.STATUS_SUCCESSFULL);						
+		}else {
+			responseVO = CoreUtils.getResponseVO(CryptoGatewayConstants.MESSAGE_SUCCESSFULL_USER_NOT_FOUND, CryptoGatewayConstants.STATUS_ERROR);			
 		}
-		cryptos.add(storeCryptoCurrencysVO);
-		
+		return responseVO;
 	}
 
 	/**
+	 * Save the store
 	 * 
+	 * @param storeSaveVO
+	 * @return
 	 */
 	@Override
-	public StoreVO findUserByCredentials(CredentialsVO credentialsVO) {	
-		return storeRepository.findStoreByCredentials(credentialsVO);
-	}
-
-	@Override
-	public ResponseVO saveStore(StoreVO storeVO) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseVO saveStore(StoreSaveVO storeSaveVO) {
+		
+		
+		//valida email, usuario, tamaño de password, tamaño de nombre de tienda
+				
+		StoreEntity storeEntity = new StoreEntity();
+		storeEntity.setCreationDate(new Date());
+		storeEntity.setEmail(storeSaveVO.getEmail());
+		storeEntity.setUser(storeSaveVO.getUser());
+		storeEntity.setPassword(storeSaveVO.getPassword());
+		storeEntity.setStoreName(storeSaveVO.getStoreName());
+		storeEntity.setStoreUI(CoreUtils.createTransactionID(12).toUpperCase());			
+		storeRepository.save(storeEntity);
+		
+		//Send email de confirmation		
+		try {		
+			return CoreUtils.getResponseVO(CryptoGatewayConstants.MESSAGE_SUCCESSFULL_STORE_SAVED, CryptoGatewayConstants.STATUS_SUCCESSFULL);	
+		
+		}catch (Exception e) {
+			return CoreUtils.getResponseVO(e.getMessage(), CryptoGatewayConstants.STATUS_ERROR);	
+		}
 	}
 
 	@Override
@@ -133,14 +121,15 @@ public class StoreService implements IStoreService{
 		return null;
 	}
 
+
 	@Override
-	public ResponseVO saveCoinsConfiguration(Collection<cryptogateway.vo.request.CryptoCurrencyVO> coins) {
+	public ResponseVO updateStore(StoreVO storeVO) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ResponseVO updateStore(StoreVO storeVO) {
+	public ResponseVO saveCoinsConfiguration(Collection<CryptoCurrencyVO> coins) {
 		// TODO Auto-generated method stub
 		return null;
 	}

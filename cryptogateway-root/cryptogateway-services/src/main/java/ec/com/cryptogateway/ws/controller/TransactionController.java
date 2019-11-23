@@ -29,7 +29,7 @@ public class TransactionController {
 	 }
 	 
 	 @PostMapping("createTransaction")
-	    public Mono<TransactionVO>  getCryptos(@RequestBody StoreQueryVO storeQueryVO) {
+	    public Mono<TransactionVO> createTransaction(@RequestBody StoreQueryVO storeQueryVO) {
 	        return Mono.justOrEmpty(transactionService.createTransaction(storeQueryVO));
 	    }	
 }

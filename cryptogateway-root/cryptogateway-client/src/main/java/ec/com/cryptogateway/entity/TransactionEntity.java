@@ -71,8 +71,8 @@ public class TransactionEntity implements Serializable{
     @Column(name = "total_payment")
 	private BigDecimal totalPayment;
     
-    @Column(name = "blockchain")
-   	private String blockchain;
+    @Column(name = "blockchain_id")
+   	private Integer blockchainId;
 	
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wallet_id", referencedColumnName = "id", insertable = false, updatable = false)
@@ -81,6 +81,10 @@ public class TransactionEntity implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cryptocurrency_id", referencedColumnName = "id", insertable = false, updatable = false)
 	private CryptoCurrencyEntity cryptoCurrency;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "blockchain_id", referencedColumnName = "id", insertable = false, updatable = false)
+	private BlockchainEntity blockchain;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", referencedColumnName = "id", insertable = false, updatable = false)

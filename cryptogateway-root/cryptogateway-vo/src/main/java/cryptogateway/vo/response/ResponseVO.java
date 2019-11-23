@@ -1,5 +1,7 @@
 package cryptogateway.vo.response;
 
+import java.util.Collection;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +14,8 @@ import lombok.NoArgsConstructor;
 public class ResponseVO {
 	
 	private String message;
-	private Boolean status;
+	private Integer status;
 	
+	private Collection<String> errorsList;
+	private Collection<String> warningList;
 }

@@ -1,4 +1,4 @@
-package ec.com.cryptogateway.service;
+package ec.com.cryptogateway.blockchain.service;
 
 import org.springframework.stereotype.Service;
 

@@ -55,11 +55,15 @@ public class WalletsEntity implements Serializable{
     @Column(name = "creation_date")
 	private Date creationDate;
     
-    @Column(name = "blockchain")
-	private String blockchain;
+    @Column(name = "blockchain_id")
+   	private Integer blockchainId;
 	
     @Column(name = "store_id")
 	private Integer storeId;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "blockchain_id", referencedColumnName = "id", insertable = false, updatable = false)
+	private BlockchainEntity blockchain;
 	
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", referencedColumnName = "id", insertable = false, updatable = false)

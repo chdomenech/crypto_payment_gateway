@@ -13,6 +13,6 @@ public class WalletVO {
 	
 	private String walletAddress;
 	private String privateKey;
-	private String blockchain;
+	private Integer blockchainId;
 	private String publicKey;
 }

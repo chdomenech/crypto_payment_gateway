@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cryptogateway.vo.request.CredentialsVO;
 import cryptogateway.vo.request.StoreQueryVO;
+import cryptogateway.vo.request.StoreSaveVO;
+import cryptogateway.vo.response.ResponseVO;
 import cryptogateway.vo.response.StoreCryptoCurrenciesVO;
-import cryptogateway.vo.response.StoreVO;
 import ec.com.cryptogateway.service.IStoreService;
 import reactor.core.publisher.Mono;
 
@@ -32,13 +33,37 @@ public class StoreController {
 	        this.storeService = storeService;
 	 }
 	 
+	/**
+	 * Get all cryptos by store
+	 * 
+	 * @param storeQueryVO
+	 * @return
+	 */
 	@PostMapping("getCryptosPayment")
     public Mono<List<StoreCryptoCurrenciesVO>> getCryptos(@RequestBody StoreQueryVO storeQueryVO) {
         return Mono.justOrEmpty(storeService.findCoinsForUIstore(storeQueryVO));
     }	
 	
+	/**
+	 * find User by credentials
+	 * 
+	 * @param credentialsVO
+	 * @return
+	 */
 	@PostMapping("authenticate")
-    public Mono<StoreVO> findUserByCredentials(@RequestBody CredentialsVO credentialsVO) {
+    public Mono<ResponseVO> findUserByCredentials(@RequestBody CredentialsVO credentialsVO) {
         return Mono.justOrEmpty(storeService.findUserByCredentials(credentialsVO));
     }
+	
+	/**
+	 * Save the store
+	 * 
+	 * @param storeSaveVO
+	 * @return
+	 */
+	@PostMapping("saveStore")
+    public Mono<ResponseVO> saveStore(@RequestBody StoreSaveVO storeSaveVO) {
+        return Mono.justOrEmpty(storeService.saveStore(storeSaveVO));
+    }
+
 }

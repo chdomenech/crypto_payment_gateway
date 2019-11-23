@@ -17,6 +17,8 @@ public class StoreQueryVO {
 	private BigDecimal totalPayment;
 	private String coinId;
 	private Integer id;
-
-
+	private String email;
+	private String storeName;
+	private String password;
+	private String user;
 }

@@ -22,7 +22,9 @@ public class QWalletsEntity extends EntityPathBase<WalletsEntity> {
 
     public static final QWalletsEntity walletsEntity = new QWalletsEntity("walletsEntity");
 
-    public final StringPath blockchain = createString("blockchain");
+    public final QBlockchainEntity blockchain;
+
+    public final NumberPath<Integer> blockchainId = createNumber("blockchainId", Integer.class);
 
     public final DateTimePath<java.util.Date> creationDate = createDateTime("creationDate", java.util.Date.class);
 
@@ -56,6 +58,7 @@ public class QWalletsEntity extends EntityPathBase<WalletsEntity> {
 
     public QWalletsEntity(Class<? extends WalletsEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.blockchain = inits.isInitialized("blockchain") ? new QBlockchainEntity(forProperty("blockchain")) : null;
         this.store = inits.isInitialized("store") ? new QStoreEntity(forProperty("store")) : null;
     }
 

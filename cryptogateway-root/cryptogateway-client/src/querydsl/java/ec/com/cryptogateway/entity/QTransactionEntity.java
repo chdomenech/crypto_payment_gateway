@@ -22,7 +22,9 @@ public class QTransactionEntity extends EntityPathBase<TransactionEntity> {
 
     public static final QTransactionEntity transactionEntity = new QTransactionEntity("transactionEntity");
 
-    public final StringPath blockchain = createString("blockchain");
+    public final QBlockchainEntity blockchain;
+
+    public final NumberPath<Integer> blockchainId = createNumber("blockchainId", Integer.class);
 
     public final NumberPath<java.math.BigDecimal> coinPrice = createNumber("coinPrice", java.math.BigDecimal.class);
 
@@ -70,7 +72,8 @@ public class QTransactionEntity extends EntityPathBase<TransactionEntity> {
 
     public QTransactionEntity(Class<? extends TransactionEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.cryptoCurrency = inits.isInitialized("cryptoCurrency") ? new QCryptoCurrencyEntity(forProperty("cryptoCurrency")) : null;
+        this.blockchain = inits.isInitialized("blockchain") ? new QBlockchainEntity(forProperty("blockchain")) : null;
+        this.cryptoCurrency = inits.isInitialized("cryptoCurrency") ? new QCryptoCurrencyEntity(forProperty("cryptoCurrency"), inits.get("cryptoCurrency")) : null;
         this.store = inits.isInitialized("store") ? new QStoreEntity(forProperty("store")) : null;
         this.transactionStatus = inits.isInitialized("transactionStatus") ? new QTransactionStatusEntity(forProperty("transactionStatus")) : null;
         this.wallet = inits.isInitialized("wallet") ? new QWalletsEntity(forProperty("wallet"), inits.get("wallet")) : null;

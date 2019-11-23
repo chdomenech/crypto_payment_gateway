@@ -20,7 +20,7 @@ spring:
   profiles: producction
   datasource:
    type: com.zaxxer.hikari.HikariDataSource
-   url: jdbc:mysql://localhost/crypto_gateway?useSSL=false
+   url: jdbc:mysql://localhost/crypto_gateway?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
    username: root
    password: root
    hikari:
@@ -36,4 +36,4 @@ logging:
     sql: debug
     ROOT: info
 server:
-  port: 8081
+  port: 8080

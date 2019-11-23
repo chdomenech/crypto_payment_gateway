@@ -1,11 +1,9 @@
 package ec.com.cryptogateway.service;
 
-import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import javax.transaction.Transactional;
 
@@ -29,9 +27,13 @@ import ec.com.cryptogateway.repository.ITransactionRepository;
 import ec.com.cryptogateway.repository.ITransactionStatusRepository;
 import ec.com.cryptogateway.repository.IWalletsRepository;
 import ec.com.cryptogateway.utils.CryptoGatewayConstants;
+import ec.cryptogateway.utils.CoreUtils;
+import ec.cryptogateway.utils.WalletUtil;
 
 /**
- * Transaction Service
+ * 
+ * @author Christian
+ *
  */
 @Service
 @Transactional
@@ -57,28 +59,6 @@ public class TransactionService implements ITransactionService{
 	
 	@Autowired
 	ITransactionStatusRepository transactionStatusRepository;
-	
-	private static char[] VALID_CHARACTERS =
-		    "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456879".toCharArray();
-
-	/**
-	 * 
-	 * @param numChars
-	 * @return
-	 */
-	public static String createTransactionID(int numChars) {
-	    SecureRandom srand = new SecureRandom();
-	    Random rand = new Random();
-	    char[] buff = new char[numChars];
-
-	    for (int i = 0; i < numChars; ++i) {
-	      if ((i % 10) == 0) {
-	          rand.setSeed(srand.nextLong());
-	      }
-	      buff[i] = VALID_CHARACTERS[rand.nextInt(VALID_CHARACTERS.length)];
-	    }
-	    return new String(buff);
-	}
 
 	@Override
 	public TransactionVO createTransaction(StoreQueryVO storeQueryVO) {	
@@ -87,9 +67,11 @@ public class TransactionService implements ITransactionService{
 		
 		 List<StoreCryptoCurrenciesVO> coinInfo=  storeService.findCoinsForUIstore(storeQueryVO);
 		 if(!CollectionUtils.isEmpty(coinInfo) && coinInfo.size()==1) {
+			 
 			 StoreCryptoCurrenciesVO dataTransaction = coinInfo.get(0);
 			 
 			 StoreEntity storeEntity = storeRepository.findById(dataTransaction.getIdStore());
+			 
 			 if(storeEntity!=null) {
 				 
 				 Optional<CryptoCurrencyEntity> cryptoCurrency = cryptoCurrencyRepository.findById(dataTransaction.getIdCoin());
@@ -97,18 +79,18 @@ public class TransactionService implements ITransactionService{
 				 Optional <TransactionStatusEntity> transactionStatus= transactionStatusRepository.
 						 findById(CryptoGatewayConstants.STATUS_TRANSACTION_WAITING);
 				 
-				 WalletVO walletVO = generateWallet(dataTransaction);			 
+				 WalletVO walletVO = WalletUtil.generateWallet(dataTransaction);			 
 				 
 				 WalletsEntity walletEntity = new WalletsEntity();
 				 walletEntity.setPrivateKey(walletVO.getPrivateKey());
 				 walletEntity.setWallet(walletVO.getWalletAddress());
 				 walletEntity.setStoreId(storeEntity.getId());
-				 walletEntity.setBlockchain(dataTransaction.getBlockchain());
+				 walletEntity.setBlockchainId(dataTransaction.getBlockchainId());
 				 walletEntity.setPublicKey(walletVO.getPublicKey());
 				 walletsRepository.save(walletEntity);
 				 
 				 TransactionEntity transactionEntity = new TransactionEntity();
-				 String transactionID = createTransactionID(23).toUpperCase();
+				 String transactionID = CoreUtils.createTransactionID(23).toUpperCase();
 				 transactionEntity.setWalletId(walletEntity.getId());
 				 transactionEntity.setTransactionId(transactionID);
 				 transactionEntity.setStoreId(storeEntity.getId());
@@ -119,7 +101,7 @@ public class TransactionService implements ITransactionService{
 					 transactionEntity.setTransactionStatusId(transactionStatus.get().getId());
 				 }						 
 				 
-				 transactionEntity.setBlockchain(dataTransaction.getBlockchain());
+				 transactionEntity.setBlockchainId(dataTransaction.getBlockchainId());
 				 transactionEntity.setCoinPrice(dataTransaction.getCryptoCurrencyPrice());
 				 transactionEntity.setCoinsAmount(dataTransaction.getCryptoCurrencyConversion());
 				 transactionEntity.setTotalPayment(dataTransaction.getTotalPayment());
@@ -142,29 +124,12 @@ public class TransactionService implements ITransactionService{
 	}
 
 
-	/**
-	 * Generate a Wallet with private key
-	 * it depend of type blockchain 
-	 * 
-	 * @param dataTransaction
-	 * @return
-	 */
-	private WalletVO generateWallet(StoreCryptoCurrenciesVO dataTransaction) {
-		WalletVO walletVO = null;
-		
-		if(dataTransaction.getBlockchain().equals(CryptoGatewayConstants.ETHEREUM_BLOCKCHAIN)){
-			 walletVO = ethereumService.createWallet();		 
-		 }
-		
-		return walletVO;		
-	}
-
-
 	@Override
 	public Collection<TransactionVO> showHistory(StoreQueryVO storeQueryVO) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	
 
 }

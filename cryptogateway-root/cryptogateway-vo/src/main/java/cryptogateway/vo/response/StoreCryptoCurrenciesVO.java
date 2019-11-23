@@ -26,7 +26,9 @@ public class StoreCryptoCurrenciesVO {
 	private BigDecimal cryptoCurrencyConversion;
 	private BigDecimal totalPayment;	
 	private String coinId;
-	private String blockchain;
+	Integer blockchainId;
+	String blockchainName;
+	String javaClass;
 	private Integer idCoin;
 	private Integer idStore;
 }

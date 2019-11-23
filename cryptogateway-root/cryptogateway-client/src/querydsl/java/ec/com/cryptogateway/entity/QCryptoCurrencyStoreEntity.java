@@ -50,7 +50,7 @@ public class QCryptoCurrencyStoreEntity extends EntityPathBase<CryptoCurrencySto
 
     public QCryptoCurrencyStoreEntity(Class<? extends CryptoCurrencyStoreEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.cryptoCurrency = inits.isInitialized("cryptoCurrency") ? new QCryptoCurrencyEntity(forProperty("cryptoCurrency")) : null;
+        this.cryptoCurrency = inits.isInitialized("cryptoCurrency") ? new QCryptoCurrencyEntity(forProperty("cryptoCurrency"), inits.get("cryptoCurrency")) : null;
         this.store = inits.isInitialized("store") ? new QStoreEntity(forProperty("store")) : null;
     }
 

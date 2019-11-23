@@ -15,7 +15,7 @@ import ec.com.cryptogateway.entity.StoreEntity;
 
 @Lazy
 @Repository
-public class StoreRepository  extends JPAQueryDslBaseRepository<StoreEntity> implements IStoreRepository {
+public class StoreRepository extends JPAQueryDslBaseRepository<StoreEntity> implements IStoreRepository {
 
 	/**
 	 * 
@@ -25,8 +25,7 @@ public class StoreRepository  extends JPAQueryDslBaseRepository<StoreEntity> imp
 	}
 	
 	/**
-	 * 
-	 * 
+	 * Find the store by credentials
 	 */
 	@Override
 	public StoreVO findStoreByCredentials(CredentialsVO credentialsVO) {
@@ -34,11 +33,11 @@ public class StoreRepository  extends JPAQueryDslBaseRepository<StoreEntity> imp
 		
 		 JPQLQuery<StoreVO> query = from(qStoreEntity).select(Projections.bean(StoreVO.class, 
 				 qStoreEntity.email.as("email")));
-	        BooleanBuilder where = new BooleanBuilder();
-	        where.and(qStoreEntity.email.eq(credentialsVO.getEmail()));
-	        where.and(qStoreEntity.password.eq(credentialsVO.getPassword()));
-	        query.where(where);
-	        return query.fetchOne();
+        BooleanBuilder where = new BooleanBuilder();
+        where.and(qStoreEntity.email.eq(credentialsVO.getEmail()));
+        where.and(qStoreEntity.password.eq(credentialsVO.getPassword()));
+        query.where(where);
+        return query.fetchOne();
 	}
 
 }
