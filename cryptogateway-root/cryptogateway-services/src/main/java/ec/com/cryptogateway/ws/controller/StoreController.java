@@ -1,6 +1,6 @@
 package ec.com.cryptogateway.ws.controller;
 
-import java.util.List;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,8 +12,9 @@ import cryptogateway.vo.request.CredentialsVO;
 import cryptogateway.vo.request.StoreQueryVO;
 import cryptogateway.vo.request.StoreSaveVO;
 import cryptogateway.vo.response.ResponseVO;
-import cryptogateway.vo.response.StoreCryptoCurrenciesVO;
 import ec.com.cryptogateway.service.IStoreService;
+import ec.cryptogateway.utils.CoreUtils;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 /**
@@ -22,6 +23,7 @@ import reactor.core.publisher.Mono;
  * @author Christian Domenech
  *
  */
+@Slf4j
 @RequestMapping("store")
 @RestController
 public class StoreController {
@@ -40,8 +42,13 @@ public class StoreController {
 	 * @return
 	 */
 	@PostMapping("getCryptosPayment")
-    public Mono<List<StoreCryptoCurrenciesVO>> getCryptos(@RequestBody StoreQueryVO storeQueryVO) {
-        return Mono.justOrEmpty(storeService.findCoinsForUIstore(storeQueryVO));
+    public Mono<ResponseVO> getCryptos(@Valid @RequestBody StoreQueryVO storeQueryVO) {
+        try {		
+			return Mono.justOrEmpty(CoreUtils.responseSuccessfull(storeService.findAllCoinsForUIstore(storeQueryVO)));		
+		}catch(Exception e) {
+			log.error("Exception thown in getCryptos {}",e);			
+			 return Mono.justOrEmpty(CoreUtils.responseException(e));			
+		} 
     }	
 	
 	/**
@@ -51,8 +58,14 @@ public class StoreController {
 	 * @return
 	 */
 	@PostMapping("authenticate")
-    public Mono<ResponseVO> findUserByCredentials(@RequestBody CredentialsVO credentialsVO) {
-        return Mono.justOrEmpty(storeService.findUserByCredentials(credentialsVO));
+    public Mono<ResponseVO> findUserByCredentials(@Valid @RequestBody CredentialsVO credentialsVO) {
+		
+		try {		
+			return Mono.justOrEmpty(CoreUtils.responseSuccessfull(storeService.findUserByCredentials(credentialsVO)));		
+		}catch(Exception e) {
+			log.error("Exception thown in findUserByCredentials {}",e);			
+			 return Mono.justOrEmpty(CoreUtils.responseException(e));			
+		}        
     }
 	
 	/**
@@ -62,8 +75,15 @@ public class StoreController {
 	 * @return
 	 */
 	@PostMapping("saveStore")
-    public Mono<ResponseVO> saveStore(@RequestBody StoreSaveVO storeSaveVO) {
-        return Mono.justOrEmpty(storeService.saveStore(storeSaveVO));
+    public Mono<ResponseVO> saveStore(@Valid @RequestBody StoreSaveVO storeSaveVO) {
+		try {		
+			return Mono.justOrEmpty(CoreUtils.responseSuccessfull(storeService.saveStore(storeSaveVO)));			
+		}catch(Exception e) {
+			
+			log.error("Exception thown in saveStore {}",e);
+			
+			 return Mono.justOrEmpty(CoreUtils.responseException(e));			
+		}        
     }
 
 }

@@ -2,6 +2,8 @@ package cryptogateway.vo.request;
 
 import java.math.BigDecimal;
 
+import javax.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StoreQueryVO {
 	
+	@NotNull
 	private String storeUI;
 	private BigDecimal totalPayment;
 	private String coinId;

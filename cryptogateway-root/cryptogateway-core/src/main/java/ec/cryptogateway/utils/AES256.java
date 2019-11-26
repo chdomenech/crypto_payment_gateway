@@ -59,7 +59,7 @@ public class AES256 {
 	    return null;
 	}
 	
-	public static void main(String[] args) 
+	/*public static void main(String[] args) 
 	{
 	    String originalString = "Caracas23.";
 	     
@@ -69,6 +69,5 @@ public class AES256 {
 	    System.out.println(originalString);
 	    System.out.println(encryptedString);
 	    System.out.println(decryptedString);
-	}
-
+	}*/
 }

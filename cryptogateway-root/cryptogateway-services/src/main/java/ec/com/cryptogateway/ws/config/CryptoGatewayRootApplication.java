@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableAutoConfiguration
 @ComponentScan(basePackages = {"ec.com.cryptogateway"})
 @EnableJpaRepositories("ec.com.cryptogateway.repository")   
-@EntityScan("ec.com.cryptogateway.entity")   
+@EntityScan("ec.com.cryptogateway.entity")  
 public class CryptoGatewayRootApplication extends SpringBootServletInitializer implements WebMvcConfigurer {
 	
 

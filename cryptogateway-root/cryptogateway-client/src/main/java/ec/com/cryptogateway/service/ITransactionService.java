@@ -3,6 +3,7 @@ package ec.com.cryptogateway.service;
 import java.util.Collection;
 
 import cryptogateway.vo.request.StoreQueryVO;
+import cryptogateway.vo.response.ResponseVO;
 import cryptogateway.vo.response.TransactionVO;
 
 /**
@@ -18,7 +19,14 @@ public interface ITransactionService {
 	 * @param transactionVO
 	 * @return
 	 */
-	TransactionVO createTransaction(StoreQueryVO storeQueryVO);
+	TransactionVO createTransactionT(StoreQueryVO storeQueryVO);
+	
+	/**
+	 * 
+	 * @param ResponseVO
+	 * @return
+	 */
+	ResponseVO createTransaction(StoreQueryVO storeQueryVO);
 	
 	/**
 	 * Show history of transactions

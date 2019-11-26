@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cryptogateway.vo.request.StoreQueryVO;
-import cryptogateway.vo.response.TransactionVO;
+import cryptogateway.vo.response.ResponseVO;
 import ec.com.cryptogateway.service.ITransactionService;
+import ec.cryptogateway.utils.CoreUtils;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 /**
@@ -17,19 +19,25 @@ import reactor.core.publisher.Mono;
  * @author Christian Domenech
  *
  */
+@Slf4j
 @RequestMapping(value="transaction")
 @RestController
 public class TransactionController {
 
 	@Autowired
 	private final ITransactionService transactionService;
-    
+	
 	 public TransactionController(ITransactionService transactionService) {
 	        this.transactionService = transactionService;
 	 }
 	 
 	 @PostMapping("createTransaction")
-	    public Mono<TransactionVO> createTransaction(@RequestBody StoreQueryVO storeQueryVO) {
-	        return Mono.justOrEmpty(transactionService.createTransaction(storeQueryVO));
-	    }	
+	public Mono<ResponseVO> createTransaction(@RequestBody StoreQueryVO storeQueryVO) {
+	    try {		
+			return Mono.justOrEmpty(CoreUtils.responseSuccessfull(transactionService.createTransaction(storeQueryVO)));		
+		}catch(Exception e) {
+			log.error("Exception thown in createTransaction {}",e);			
+			 return Mono.justOrEmpty(CoreUtils.responseException(e));			
+		}
+	}	
 }

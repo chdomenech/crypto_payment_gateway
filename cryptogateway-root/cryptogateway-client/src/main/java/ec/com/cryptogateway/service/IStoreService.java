@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.List;
 
 import cryptogateway.vo.request.CredentialsVO;
-import cryptogateway.vo.response.CryptoCurrencyVO;
 import cryptogateway.vo.request.StoreQueryVO;
 import cryptogateway.vo.request.StoreSaveVO;
+import cryptogateway.vo.response.CryptoCurrencyVO;
 import cryptogateway.vo.response.ResponseVO;
 import cryptogateway.vo.response.StoreCryptoCurrenciesVO;
 import cryptogateway.vo.response.StoreVO;
@@ -27,6 +27,14 @@ public interface IStoreService{
 	 * @return
 	 */
     List<StoreCryptoCurrenciesVO> findCoinsForUIstore(StoreQueryVO storeQueryVO);
+    
+    /**
+     * List all cryptocurrencys of the store
+     * 
+     * @param storeQueryVO
+     * @return
+     */
+    ResponseVO findAllCoinsForUIstore(StoreQueryVO storeQueryVO);
     
     /**
      * Find a user by credentials

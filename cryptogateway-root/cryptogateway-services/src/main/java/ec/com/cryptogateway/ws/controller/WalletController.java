@@ -11,6 +11,11 @@ import cryptogateway.vo.response.WalletVO;
 import ec.com.cryptogateway.service.IWalletService;
 import reactor.core.publisher.Mono;
 
+/**
+ * 
+ * @author Christian
+ *
+ */
 @RequestMapping(value="wallet")
 @RestController
 public class WalletController {

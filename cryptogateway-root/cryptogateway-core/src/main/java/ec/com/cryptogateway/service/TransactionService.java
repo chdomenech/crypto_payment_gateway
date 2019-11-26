@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import cryptogateway.vo.request.StoreQueryVO;
+import cryptogateway.vo.response.ResponseVO;
 import cryptogateway.vo.response.StoreCryptoCurrenciesVO;
 import cryptogateway.vo.response.TransactionVO;
 import cryptogateway.vo.response.WalletVO;
@@ -60,8 +61,11 @@ public class TransactionService implements ITransactionService{
 	@Autowired
 	ITransactionStatusRepository transactionStatusRepository;
 
+	/**
+	 * 
+	 */
 	@Override
-	public TransactionVO createTransaction(StoreQueryVO storeQueryVO) {	
+	public TransactionVO createTransactionT(StoreQueryVO storeQueryVO) {	
 		
 		TransactionVO transactionVO = new TransactionVO();
 		
@@ -121,15 +125,20 @@ public class TransactionService implements ITransactionService{
 		 }
 		 
 		 return transactionVO;		
-	}
+	}	
+	
 
+	@Override
+	public ResponseVO createTransaction(StoreQueryVO storeQueryVO) {
+		TransactionVO transactionVO = createTransactionT(storeQueryVO);
+		return new ResponseVO(CryptoGatewayConstants.STATUS_SUCCESSFULL, null, transactionVO);
+	}
+	
 
 	@Override
 	public Collection<TransactionVO> showHistory(StoreQueryVO storeQueryVO) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	
 
 }

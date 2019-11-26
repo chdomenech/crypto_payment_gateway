@@ -1,5 +1,7 @@
 package cryptogateway.vo.request;
 
+import javax.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CredentialsVO {
 	
+	@NotNull
 	private String email;
+	@NotNull
 	private String password;
+	@NotNull
 	private String user;
 }

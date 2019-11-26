@@ -16,7 +16,7 @@ public class TransactionVO {
  
 	private Integer id;	
 	private String transactionId;
-	private String walletAddress;
+	private String walletAddress;	
 	private Date creationTime;
 	private BigDecimal coinsAmount;
 	private String coinId;
