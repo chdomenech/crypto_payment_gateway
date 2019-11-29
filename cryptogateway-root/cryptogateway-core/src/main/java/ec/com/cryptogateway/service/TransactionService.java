@@ -17,7 +17,6 @@ import cryptogateway.vo.response.StoreCryptoCurrenciesVO;
 import cryptogateway.vo.response.TransactionVO;
 import cryptogateway.vo.response.WalletVO;
 import ec.com.cryptogateway.blockchain.service.IEthereumService;
-import ec.com.cryptogateway.entity.CryptoCurrencyEntity;
 import ec.com.cryptogateway.entity.StoreEntity;
 import ec.com.cryptogateway.entity.TransactionEntity;
 import ec.com.cryptogateway.entity.TransactionStatusEntity;
@@ -78,8 +77,6 @@ public class TransactionService implements ITransactionService{
 			 
 			 if(storeEntity!=null) {
 				 
-				 Optional<CryptoCurrencyEntity> cryptoCurrency = cryptoCurrencyRepository.findById(dataTransaction.getIdCoin());
-				 
 				 Optional <TransactionStatusEntity> transactionStatus= transactionStatusRepository.
 						 findById(CryptoGatewayConstants.STATUS_TRANSACTION_WAITING);
 				 
@@ -98,18 +95,20 @@ public class TransactionService implements ITransactionService{
 				 transactionEntity.setWalletId(walletEntity.getId());
 				 transactionEntity.setTransactionId(transactionID);
 				 transactionEntity.setStoreId(storeEntity.getId());
-				 if(cryptoCurrency.isPresent()) {	
-					 transactionEntity.setCryptoCurrencyId(cryptoCurrency.get().getId());
-				 }
+				 transactionEntity.setCryptoCurrencyId(dataTransaction.getIdCoin());
+				 
 				 if(transactionStatus.isPresent()) {
 					 transactionEntity.setTransactionStatusId(transactionStatus.get().getId());
 				 }						 
 				 
 				 transactionEntity.setBlockchainId(dataTransaction.getBlockchainId());
 				 transactionEntity.setCoinPrice(dataTransaction.getCryptoCurrencyPrice());
-				 transactionEntity.setCoinsAmount(dataTransaction.getCryptoCurrencyConversion());
+				 transactionEntity.setCoinsAmount(dataTransaction.getCryptoCurrencyConversion());				 
+				 transactionEntity.setCreationTime(new Date());		
+				 transactionEntity.setTimeoutTransaction(CoreUtils.addTimeToDate(dataTransaction.getTimeoutMinuts(), 
+						 transactionEntity.getCreationTime()));
 				 transactionEntity.setTotalPayment(dataTransaction.getTotalPayment());
-				 transactionEntity.setCreationTime(new Date());				 
+				 		 
 				 transactionRepository.save(transactionEntity);		 
 				 
 				 transactionVO.setCoinId(dataTransaction.getCoinId());

@@ -52,8 +52,8 @@ public class CryptoCurrencyStoreRepository extends JPAQueryDslBaseRepository<Cry
 	     JPQLQuery<CryptoCurrencyVO> query = from(qCryptoCurrencyStoreEntity).select(Projections.bean(CryptoCurrencyVO.class,
 	    		 qCryptoCurrencyStoreEntity.storeId.as("idStore"), qCryptoCurrencyEntity.apiUrl,qCryptoCurrencyEntity.apiUrl1, 
 	    		 qCryptoCurrencyEntity.apiUrl2, qCryptoCurrencyEntity.id.as("idCoin"), qCryptoCurrencyEntity.coinId, 
-	    		 qBlockchainEntity.id.as("blockchainId"), qBlockchainEntity.javaClass, qBlockchainEntity.name.as("blockchainName")
-	    		 ));
+	    		 qBlockchainEntity.id.as("blockchainId"), qBlockchainEntity.javaClass, qBlockchainEntity.name.as("blockchainName"),
+	    		 qBlockchainEntity.timeoutMinuts));
 	     
 	     query.innerJoin(qCryptoCurrencyStoreEntity.store, qStoreEntity);
 	     query.innerJoin(qCryptoCurrencyStoreEntity.cryptoCurrency, qCryptoCurrencyEntity);

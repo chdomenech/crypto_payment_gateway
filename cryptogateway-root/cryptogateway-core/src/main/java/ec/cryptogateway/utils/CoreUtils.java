@@ -1,6 +1,8 @@
 package ec.cryptogateway.utils;
 
 import java.security.SecureRandom;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,6 +26,7 @@ public class CoreUtils {
 	private static final String USER_REGEX = "^[a-zA-Z0-9]{6,10}$";
 	private static final String NAME_STORE_REGEX = "^[a-zA-Z0-9]{5,30}$";
 	private static final String PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+	public static final Integer TIME_CHECKING_TRANSACTION= 12;
 
 	
 	/**
@@ -112,6 +115,20 @@ public class CoreUtils {
 		 */
 		return validatePattern(password, PASSWORD_REGEX);
 	}
+	
+	/**
+	 * Add time to a date
+	 * 
+	 * @param hours
+	 * @param initialDate
+	 * @return
+	 */
+	public static Date addTimeToDate(Integer minuts, Date initialDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(initialDate);
+        calendar.add(Calendar.MINUTE, minuts);
+        return calendar.getTime();
+    }
 	
 	
 	/**
