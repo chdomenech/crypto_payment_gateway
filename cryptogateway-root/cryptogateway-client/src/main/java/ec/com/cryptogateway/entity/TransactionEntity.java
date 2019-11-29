@@ -52,6 +52,12 @@ public class TransactionEntity implements Serializable{
     
     @Column(name = "creation_time")
 	private Date creationTime;
+    
+    @Column(name = "timeout_transaction")
+	private Date timeoutTransaction;
+    
+    @Column(name = "end_transaction")
+	private Date endTransaction;
 
     @Column(name = "cryptocurrency_id")
 	private Integer cryptoCurrencyId;

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Send information about cryptocurrency 
- * accept for the store
+ * accepted for the store
  * 
  * @author Christian
  *
@@ -31,4 +31,5 @@ public class StoreCryptoCurrenciesVO {
 	String javaClass;
 	private Integer idCoin;
 	private Integer idStore;
+	private Integer timeoutMinuts;
 }

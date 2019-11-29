@@ -84,6 +84,7 @@ public class ApisUtil {
 		storeCryptoCurrencysVO.setBlockchainName(data.getBlockchainName());
 		storeCryptoCurrencysVO.setJavaClass(data.getJavaClass());
 		storeCryptoCurrencysVO.setIdStore(data.getIdStore());
+		storeCryptoCurrencysVO.setTimeoutMinuts(data.getTimeoutMinuts());		
 		
 		if(coingeckoApiVO.getMarketData()!=null) {			
 			
@@ -95,7 +96,7 @@ public class ApisUtil {
 			BigDecimal priceCoin = new BigDecimal(priceUSD).setScale(2, RoundingMode.HALF_DOWN);						
 			storeCryptoCurrencysVO.setCryptoCurrencyPrice(priceCoin);
 			
-			BigDecimal total = storeQueryVO.getTotalPayment().divide(priceCoin, 4, RoundingMode.HALF_DOWN);
+			BigDecimal total = storeQueryVO.getTotalPayment().divide(priceCoin, 6, RoundingMode.HALF_DOWN);
 			storeCryptoCurrencysVO.setCryptoCurrencyConversion(total);
 		}
 		cryptos.add(storeCryptoCurrencysVO);

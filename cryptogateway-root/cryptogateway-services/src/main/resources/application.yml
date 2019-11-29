@@ -1,5 +1,6 @@
 spring:
   profiles.active: producction
+  spring.main.web-application-type: reactive
 ---
 spring:
   profiles: develop

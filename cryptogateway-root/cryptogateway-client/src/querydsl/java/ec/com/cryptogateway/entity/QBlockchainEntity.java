@@ -27,6 +27,8 @@ public class QBlockchainEntity extends EntityPathBase<BlockchainEntity> {
 
     public final BooleanPath status = createBoolean("status");
 
+    public final NumberPath<Integer> timeoutMinuts = createNumber("timeoutMinuts", Integer.class);
+
     public QBlockchainEntity(String variable) {
         super(BlockchainEntity.class, forVariable(variable));
     }

@@ -24,9 +24,9 @@ configurations {
 dependencies {
     compile project(":cryptogateway-core")
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     compile group: 'mysql', name: 'mysql-connector-java'
+    implementation "org.springframework.boot:spring-boot-starter-security"
     compile group: 'com.zaxxer', name: 'HikariCP'
     compile group: 'com.h2database', name: 'h2'
 

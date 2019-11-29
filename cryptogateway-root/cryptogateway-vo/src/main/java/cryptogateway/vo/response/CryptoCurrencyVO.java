@@ -25,4 +25,5 @@ public class CryptoCurrencyVO {
 	Integer blockchainId;
 	String blockchainName;
 	String javaClass;
+	Integer timeoutMinuts;
 }

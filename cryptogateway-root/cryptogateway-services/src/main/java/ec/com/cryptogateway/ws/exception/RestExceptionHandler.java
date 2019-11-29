@@ -1,4 +1,4 @@
-package ec.com.cryptogateway.exception;
+package ec.com.cryptogateway.ws.exception;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

@@ -47,4 +47,7 @@ public class BlockchainEntity implements Serializable {
     
     @Column(name = "status")
 	private Boolean status;
+    
+    @Column(name = "timeout_minuts")
+    private Integer timeoutMinuts;
 }

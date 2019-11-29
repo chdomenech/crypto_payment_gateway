@@ -36,11 +36,15 @@ public class QTransactionEntity extends EntityPathBase<TransactionEntity> {
 
     public final NumberPath<Integer> cryptoCurrencyId = createNumber("cryptoCurrencyId", Integer.class);
 
+    public final DateTimePath<java.util.Date> endTransaction = createDateTime("endTransaction", java.util.Date.class);
+
     public final NumberPath<Integer> id = createNumber("id", Integer.class);
 
     public final QStoreEntity store;
 
     public final NumberPath<Integer> storeId = createNumber("storeId", Integer.class);
+
+    public final DateTimePath<java.util.Date> timeoutTransaction = createDateTime("timeoutTransaction", java.util.Date.class);
 
     public final NumberPath<java.math.BigDecimal> totalPayment = createNumber("totalPayment", java.math.BigDecimal.class);
 
