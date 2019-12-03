@@ -1,5 +1,7 @@
 package cryptogateway.vo.response;
 
+import java.util.Collection;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,4 +28,5 @@ public class CryptoCurrencyVO {
 	String blockchainName;
 	String javaClass;
 	Integer timeoutMinuts;
+	Collection<String> coins;
 }

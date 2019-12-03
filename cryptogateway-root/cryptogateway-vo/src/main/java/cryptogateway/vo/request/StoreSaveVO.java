@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StoreSaveVO {
 	
-
 	@Email
 	@NotNull
 	private String email;

@@ -1,7 +1,6 @@
 package ec.com.cryptogateway.ws.config;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -12,7 +11,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication(scanBasePackages = {
         "ec.com.cryptogateway"
 })
-@EnableAutoConfiguration
 @ComponentScan(basePackages = {"ec.com.cryptogateway"})
 @EnableJpaRepositories("ec.com.cryptogateway.repository")   
 @EntityScan("ec.com.cryptogateway.entity")  

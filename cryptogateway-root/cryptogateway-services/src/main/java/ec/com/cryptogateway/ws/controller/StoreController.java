@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cryptogateway.vo.request.CredentialsVO;
 import cryptogateway.vo.request.StoreQueryVO;
 import cryptogateway.vo.request.StoreSaveVO;
+import cryptogateway.vo.request.StoreUpdateVO;
 import cryptogateway.vo.response.ResponseVO;
 import ec.com.cryptogateway.service.IStoreService;
 import ec.cryptogateway.utils.CoreUtils;
@@ -85,5 +86,61 @@ public class StoreController {
 			 return Mono.justOrEmpty(CoreUtils.responseException(e));			
 		}        
     }
+	
+	/**
+	 * update the store
+	 * 
+	 * @param storeSaveVO
+	 * @return
+	 */
+	@PostMapping("updateStore")
+    public Mono<ResponseVO> updateStore(@Valid @RequestBody StoreUpdateVO storeUpdateVO) {
+		try {		
+			return Mono.justOrEmpty(CoreUtils.responseSuccessfull(storeService.updateStore(storeUpdateVO)));			
+		}catch(Exception e) {
+			
+			log.error("Exception thown in updateStore {}",e);
+			
+			 return Mono.justOrEmpty(CoreUtils.responseException(e));			
+		}        
+    }
+	
+	/**
+	 * update the store
+	 * 
+	 * @param storeSaveVO
+	 * @return
+	 */
+	@PostMapping("resendPassword")
+    public Mono<ResponseVO> resendPassword(@Valid @RequestBody StoreQueryVO storeQueryVO) {
+		try {		
+			return Mono.justOrEmpty(CoreUtils.responseSuccessfull(storeService.resendPassword(storeQueryVO)));			
+		}catch(Exception e) {
+			
+			log.error("Exception thown in resendPassword {}",e);
+			
+			 return Mono.justOrEmpty(CoreUtils.responseException(e));			
+		}        
+    }
 
+	
+	/**
+	 * update the store
+	 * 
+	 * @param storeSaveVO
+	 * @return
+	 */
+	@PostMapping("saveCoinsSelected")
+    public Mono<ResponseVO> saveCoinsSelected(@Valid @RequestBody StoreQueryVO storeQueryVO) {
+		try {		
+			
+			return Mono.justOrEmpty(CoreUtils.responseSuccessfull(storeService.resendPassword(storeQueryVO)));	
+			
+		}catch(Exception e) {
+			
+			log.error("Exception thown in saveCoinsSelected {}",e);
+			
+			 return Mono.justOrEmpty(CoreUtils.responseException(e));			
+		}        
+    }
 }

@@ -1,15 +1,14 @@
 package ec.com.cryptogateway.service;
 
-import java.util.Collection;
 import java.util.List;
 
 import cryptogateway.vo.request.CredentialsVO;
 import cryptogateway.vo.request.StoreQueryVO;
 import cryptogateway.vo.request.StoreSaveVO;
+import cryptogateway.vo.request.StoreUpdateVO;
 import cryptogateway.vo.response.CryptoCurrencyVO;
 import cryptogateway.vo.response.ResponseVO;
 import cryptogateway.vo.response.StoreCryptoCurrenciesVO;
-import cryptogateway.vo.response.StoreVO;
 
 /**
  * Store Service
@@ -51,22 +50,14 @@ public interface IStoreService{
      */
     ResponseVO saveStore(StoreSaveVO storeSaveVO);
     
+   
     /**
      * Resend the password
      * 
      * @param credentialsVO
      * @return
      */
-    ResponseVO resendPassword(CredentialsVO credentialsVO);
-    
-    /**
-     * Save the password
-     * 
-     * @param credentialsVO
-     * @return
-     */
-    ResponseVO savePassword(CredentialsVO credentialsVO);
-    
+    ResponseVO resendPassword(StoreQueryVO storeQueryVO);
     
     /**
      * Save configuration of coins for the store
@@ -74,13 +65,13 @@ public interface IStoreService{
      * @param coins
      * @return
      */
-    ResponseVO saveCoinsConfiguration(Collection<CryptoCurrencyVO> coins);
+    ResponseVO saveCoinsConfiguration(CryptoCurrencyVO coins);
     
     /**
      * Update the store
      * 
-     * @param coins
+     * @param storeUpdateVO
      * @return
      */
-    ResponseVO updateStore(StoreVO storeVO);
+    ResponseVO updateStore(StoreUpdateVO storeUpdateVO);
 }

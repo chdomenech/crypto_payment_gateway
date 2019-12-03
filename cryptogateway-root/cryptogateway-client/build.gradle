@@ -47,6 +47,7 @@ dependencies {
     compile 'org.springframework.data:spring-data-commons'
     compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	compile 'org.springframework:spring-webflux'
    	compile group: 'org.springframework.data', name: 'spring-data-jpa'
 	compile group: 'com.querydsl', name: 'querydsl-jpa'
 	compile group: 'javax.annotation', name: 'javax.annotation-api'

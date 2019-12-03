@@ -3,8 +3,9 @@ dependencies {
 	compile('ec.com.cryptogateway:cryptogateway-client:1.0.0-SNAPSHOT')
 	compileOnly 'org.projectlombok:lombok'
 	compile group: 'org.hibernate', name: 'hibernate-entitymanager'
+	compile group: 'org.springframework', name: 'spring-web'
 	compile group: 'org.web3j', name: 'core', version: '4.5.5'
 	compile group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.14.7'	
 	annotationProcessor 'org.projectlombok:lombok'
-    testCompile group: 'junit', name: 'junit'    
+    testCompile group: 'junit', name: 'junit'
 }

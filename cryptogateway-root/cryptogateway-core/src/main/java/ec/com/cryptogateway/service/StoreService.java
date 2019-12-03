@@ -16,11 +16,14 @@ import org.springframework.util.StringUtils;
 import cryptogateway.vo.request.CredentialsVO;
 import cryptogateway.vo.request.StoreQueryVO;
 import cryptogateway.vo.request.StoreSaveVO;
+import cryptogateway.vo.request.StoreUpdateVO;
 import cryptogateway.vo.response.CryptoCurrencyVO;
 import cryptogateway.vo.response.ResponseVO;
 import cryptogateway.vo.response.StoreCryptoCurrenciesVO;
 import cryptogateway.vo.response.StoreVO;
+import ec.com.cryptogateway.entity.CryptoCurrencyEntity;
 import ec.com.cryptogateway.entity.StoreEntity;
+import ec.com.cryptogateway.repository.ICryptoCurrencyRepository;
 import ec.com.cryptogateway.repository.ICryptoCurrencyStoreRepository;
 import ec.com.cryptogateway.repository.IStoreRepository;
 import ec.com.cryptogateway.utils.ApisUtil;
@@ -40,6 +43,9 @@ public class StoreService implements IStoreService{
     
     @Autowired
     private IStoreRepository storeRepository;
+    
+    @Autowired
+    private ICryptoCurrencyRepository cryptoCurrencyRepository;
     
     @Autowired
     private ICryptoCurrencyStoreRepository cryptoCurrencyStoreRepository;
@@ -72,6 +78,9 @@ public class StoreService implements IStoreService{
      */
 	@Override
 	public ResponseVO findAllCoinsForUIstore(StoreQueryVO storeQueryVO) {
+			
+		if(storeQueryVO==null || storeQueryVO.getStoreUI()== null)
+			return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.MESSAGE_ERROR_STORE_NOT_FOUND);	
 		
 		List<StoreCryptoCurrenciesVO> storeCryptoCurrencies= findCoinsForUIstore(storeQueryVO);
 		
@@ -91,12 +100,13 @@ public class StoreService implements IStoreService{
 	 */
 	@Override
 	public ResponseVO findUserByCredentials(CredentialsVO credentialsVO) {	
+		
 		StoreVO storeVO = storeRepository.findStoreByCredentials(credentialsVO);		
 		ResponseVO responseVO;
 		if(storeVO!=null) {			
 			responseVO =  new ResponseVO( CryptoGatewayConstants.STATUS_SUCCESSFULL,CryptoGatewayConstants.MESSAGE_SUCCESSFULL_USER_FOUND);						
 		}else {
-			responseVO =  new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.MESSAGE_SUCCESSFULL_USER_NOT_FOUND);			
+			responseVO =  new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.MESSAGE_ERROR_USER_NOT_FOUND);			
 		}
 		return responseVO;
 	}
@@ -194,7 +204,7 @@ public class StoreService implements IStoreService{
 		Collection<String> warningList = new ArrayList<String>();
 		
 		/* Validate patterns */
-		if(StringUtils.isEmpty(storeSaveVO.getPassword()) | !CoreUtils.validatePassword(storeSaveVO.getPassword())) {
+		if(StringUtils.isEmpty(storeSaveVO.getPassword()) || !CoreUtils.validatePassword(storeSaveVO.getPassword())) {
 			warningList.add(CryptoGatewayConstants.INVALID_PASSWORD);
 		}
 		
@@ -202,15 +212,15 @@ public class StoreService implements IStoreService{
 			warningList.add(CryptoGatewayConstants.DIFFERENT_PASSWORD);
 		}
 		
-		if(StringUtils.isEmpty(storeSaveVO.getEmail()) | !CoreUtils.validateEmail(storeSaveVO.getEmail())) {
+		if(StringUtils.isEmpty(storeSaveVO.getEmail()) || !CoreUtils.validateEmail(storeSaveVO.getEmail())) {
 			warningList.add(CryptoGatewayConstants.INVALID_EMAIL);
 		}
 		
-		if(StringUtils.isEmpty(storeSaveVO.getUser()) | !CoreUtils.validateUser(storeSaveVO.getUser())) {
+		if(StringUtils.isEmpty(storeSaveVO.getUser()) || !CoreUtils.validateUser(storeSaveVO.getUser())) {
 			warningList.add(CryptoGatewayConstants.INVALID_USER);
 		}
 		
-		if(StringUtils.isEmpty(storeSaveVO.getStoreName())|  !CoreUtils.validateStoreName(storeSaveVO.getStoreName())) {
+		if(StringUtils.isEmpty(storeSaveVO.getStoreName()) ||  !CoreUtils.validateStoreName(storeSaveVO.getStoreName())) {
 			warningList.add(CryptoGatewayConstants.INVALID_STORE_NAME);
 		}
 		
@@ -222,29 +232,99 @@ public class StoreService implements IStoreService{
 	}
 
 
+	/**
+	 * Resend the password
+	 * 
+	 * @param storeQueryVO
+	 * @return
+	 */
 	@Override
-	public ResponseVO resendPassword(CredentialsVO credentialsVO) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseVO resendPassword(StoreQueryVO storeQueryVO) {
+		
+		StoreEntity storeEntity = storeRepository.findStoreByParams(storeQueryVO);
+		if(storeEntity==null) {
+			return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.MESSAGE_ERROR_STORE_NOT_FOUND);	
+		}else {
+			
+			String password = AES256.decrypt(storeEntity.getPassword(), AES256.SECRET_KEY);						
+			sendEmail(null);			
+			return new ResponseVO(CryptoGatewayConstants.STATUS_SUCCESSFULL, 
+					CryptoGatewayConstants.MESSAGE_SUCCESSFULL_STORE_UPDATED);
+		}
+
 	}
 
+	/**
+	 * Save coins to the store
+	 * 
+	 * @param coins
+	 * @return
+	 */
 	@Override
-	public ResponseVO savePassword(CredentialsVO credentialsVO) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseVO saveCoinsConfiguration(CryptoCurrencyVO cryptoCurrencyVO) {
+		
+		/* Id sera tomado de la sesion cuando se implement spring security*/
+		StoreQueryVO storeQueryVO = new StoreQueryVO();
+		storeQueryVO.setId(cryptoCurrencyVO.getIdStore());
+		
+		StoreEntity storeEntity = storeRepository.findStoreByParams(storeQueryVO);
+		if(storeEntity==null) {
+			return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.MESSAGE_ERROR_STORE_NOT_FOUND);	
+		}
+		
+		if(CollectionUtils.isEmpty(cryptoCurrencyVO.getCoins())) {
+			return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.MESSAGE_ERROR_COINS_NOT_FOUND);			
+		}
+		
+		Collection<CryptoCurrencyEntity> cryptoCurrency = cryptoCurrencyRepository.findCryptoCurrencys();
 	}
 
-
+	/**
+	 * Actualiza la tienda
+	 * 
+	 * @param storeUpdateVO
+	 * @return
+	 */
 	@Override
-	public ResponseVO updateStore(StoreVO storeVO) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseVO updateStore(StoreUpdateVO storeUpdateVO) {
+		
+		/* Id sera tomado de la sesion cuando se implement spring security*/
+		StoreQueryVO storeQueryVO = new StoreQueryVO();
+		storeQueryVO.setId(storeUpdateVO.getId());
+		
+		if(storeUpdateVO == null || storeUpdateVO.getId() == null) {
+			return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.MESSAGE_ERROR_DATOS_REQUERIDOS);	
+		}
+		
+		StoreEntity storeEntity = storeRepository.findStoreByParams(storeQueryVO);
+		if(storeEntity==null) {
+			return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.MESSAGE_ERROR_STORE_NOT_FOUND);	
+		}else {
+			StoreSaveVO storeSaveVO =new StoreSaveVO();
+			storeSaveVO.setEmail(storeEntity.getEmail());
+			
+			storeSaveVO.setPassword(storeUpdateVO.getPassword());
+			storeSaveVO.setRepeatPassword(storeUpdateVO.getRepeatPassword());
+			
+			storeSaveVO.setStoreName(storeUpdateVO.getStoreName());
+			storeSaveVO.setUser(storeEntity.getUser());		
+			
+			ResponseVO responseValidation = validateStorePatterns(storeSaveVO);
+			if(responseValidation!=null) {
+				return responseValidation;
+			}
+			
+			storeEntity.setStoreName(storeUpdateVO.getStoreName());
+			storeSaveVO.setPassword(AES256.encrypt(storeUpdateVO.getPassword(), AES256.SECRET_KEY));
+			
+			storeRepository.update(storeEntity);
+			
+			//send Email
+			sendEmail(storeEntity);
+				
+			return new ResponseVO(CryptoGatewayConstants.STATUS_SUCCESSFULL, CryptoGatewayConstants.MESSAGE_SUCCESSFULL_STORE_UPDATED);
+			
+		}
 	}
 
-	@Override
-	public ResponseVO saveCoinsConfiguration(Collection<CryptoCurrencyVO> coins) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }

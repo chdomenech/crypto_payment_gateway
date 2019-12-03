@@ -62,7 +62,7 @@ public class StoreRepository extends JPAQueryDslBaseRepository<StoreEntity> impl
         	where.and(qStoreEntity.user.eq(storeVO.getUser()));
         }
         if(!StringUtils.isEmpty(storeVO.getStoreName())){
-        	where.and(qStoreEntity.email.eq(storeVO.getStoreName()));
+        	where.and(qStoreEntity.storeName.eq(storeVO.getStoreName()));
         }
         query.where(where);
         if(query.fetchCount()>0) {
@@ -70,6 +70,32 @@ public class StoreRepository extends JPAQueryDslBaseRepository<StoreEntity> impl
         }
         
         return result;
+	}
+
+	@Override
+	public StoreEntity findStoreByParams(StoreQueryVO storeQuery) {
+		QStoreEntity qStoreEntity = QStoreEntity.storeEntity;		
+		 JPQLQuery<StoreEntity> query = from(qStoreEntity);
+		 
+       BooleanBuilder where = new BooleanBuilder();
+       
+       if(!StringUtils.isEmpty(storeQuery.getEmail())){
+       	where.and(qStoreEntity.email.eq(storeQuery.getEmail()));
+       }
+       if(!StringUtils.isEmpty(storeQuery.getUser())){
+       	where.and(qStoreEntity.user.eq(storeQuery.getUser()));
+       }
+       if(!StringUtils.isEmpty(storeQuery.getStoreName())){
+       	where.and(qStoreEntity.storeName.eq(storeQuery.getStoreName()));
+       }       
+       if(!StringUtils.isEmpty(storeQuery.getId())){
+          	where.and(qStoreEntity.id.eq(storeQuery.getId()));
+       }
+       if(!StringUtils.isEmpty(storeQuery.getStoreUI())){
+         	where.and(qStoreEntity.storeUI.eq(storeQuery.getStoreUI()));
+      }
+      query.where(where);
+      return query.fetchFirst();
 	}
 
 }

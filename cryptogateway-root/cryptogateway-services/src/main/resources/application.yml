@@ -1,6 +1,10 @@
 spring:
   profiles.active: producction
-  spring.main.web-application-type: reactive
+  main:
+    web-application-type: reactive
+  autoconfigure:
+    exclude:
+     org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration
 ---
 spring:
   profiles: develop
