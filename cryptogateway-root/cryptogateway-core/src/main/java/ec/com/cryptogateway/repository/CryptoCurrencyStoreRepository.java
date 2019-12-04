@@ -6,8 +6,10 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.dml.DeleteClause;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPADeleteClause;
 
 import cryptogateway.vo.request.StoreQueryVO;
 import cryptogateway.vo.response.CryptoCurrencyVO;
@@ -55,8 +57,8 @@ public class CryptoCurrencyStoreRepository extends JPAQueryDslBaseRepository<Cry
 	    		 qBlockchainEntity.id.as("blockchainId"), qBlockchainEntity.javaClass, qBlockchainEntity.name.as("blockchainName"),
 	    		 qBlockchainEntity.timeoutMinuts));
 	     
-	     query.innerJoin(qCryptoCurrencyStoreEntity.store, qStoreEntity);
-	     query.innerJoin(qCryptoCurrencyStoreEntity.cryptoCurrency, qCryptoCurrencyEntity);
+	     query.innerJoin(qCryptoCurrencyStoreEntity.storeEntity, qStoreEntity);
+	     query.innerJoin(qCryptoCurrencyStoreEntity.cryptocurrencyEntity, qCryptoCurrencyEntity);
 	     query.innerJoin(qCryptoCurrencyEntity.blockchain, qBlockchainEntity);
 	     
 	     BooleanBuilder where = new BooleanBuilder();
@@ -71,6 +73,21 @@ public class CryptoCurrencyStoreRepository extends JPAQueryDslBaseRepository<Cry
 	     query.where(where);
 	     
 	     return query.fetch();
+	}
+
+	/**
+	 * Delete al crypto currencys of the store
+	 * 
+	 */
+	@Override
+	public boolean deleteAllCryptoCurrencyStore(Integer storeId) {
+		
+		QCryptoCurrencyStoreEntity qCryptoCurrencyStoreEntity = QCryptoCurrencyStoreEntity.cryptoCurrencyStoreEntity;
+		DeleteClause<JPADeleteClause> query = delete(qCryptoCurrencyStoreEntity);
+		BooleanBuilder where = new BooleanBuilder();	     
+	    where.and(qCryptoCurrencyStoreEntity.storeEntity.id.eq(storeId));
+	    query.where(where);
+	    return query.execute()>0;
 	}
 
 

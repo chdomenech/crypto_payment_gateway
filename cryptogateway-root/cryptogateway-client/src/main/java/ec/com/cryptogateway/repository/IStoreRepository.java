@@ -15,7 +15,7 @@ import ec.com.cryptogateway.entity.StoreEntity;
  *
  */
 @Transactional(readOnly = true) 
-public interface IStoreRepository  extends IQueryDslBaseRepository<StoreEntity> {
+public interface IStoreRepository extends IQueryDslBaseRepository<StoreEntity> {
 
 	/**
 	 * Find store by credentials

@@ -26,4 +26,12 @@ public interface ICryptoCurrencyStoreRepository extends IQueryDslBaseRepository<
 	 */
 	Collection<CryptoCurrencyVO> getCryptoCurrencyStore(StoreQueryVO storeQueryVO);
 	
+	/**
+	 * Delete all cryptocurrency of the store
+	 * 
+	 * @param storeId
+	 * @return
+	 */
+	boolean deleteAllCryptoCurrencyStore(Integer storeId);
+	
 }

@@ -22,13 +22,15 @@ public class QCryptoCurrencyStoreEntity extends EntityPathBase<CryptoCurrencySto
 
     public static final QCryptoCurrencyStoreEntity cryptoCurrencyStoreEntity = new QCryptoCurrencyStoreEntity("cryptoCurrencyStoreEntity");
 
-    public final QCryptoCurrencyEntity cryptoCurrency;
+    public final QCryptoCurrencyEntity cryptocurrencyEntity;
 
     public final NumberPath<Integer> cryptoCurrencyId = createNumber("cryptoCurrencyId", Integer.class);
 
     public final NumberPath<Integer> id = createNumber("id", Integer.class);
 
-    public final QStoreEntity store;
+    public final BooleanPath status = createBoolean("status");
+
+    public final QStoreEntity storeEntity;
 
     public final NumberPath<Integer> storeId = createNumber("storeId", Integer.class);
 
@@ -50,8 +52,8 @@ public class QCryptoCurrencyStoreEntity extends EntityPathBase<CryptoCurrencySto
 
     public QCryptoCurrencyStoreEntity(Class<? extends CryptoCurrencyStoreEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.cryptoCurrency = inits.isInitialized("cryptoCurrency") ? new QCryptoCurrencyEntity(forProperty("cryptoCurrency"), inits.get("cryptoCurrency")) : null;
-        this.store = inits.isInitialized("store") ? new QStoreEntity(forProperty("store")) : null;
+        this.cryptocurrencyEntity = inits.isInitialized("cryptocurrencyEntity") ? new QCryptoCurrencyEntity(forProperty("cryptocurrencyEntity"), inits.get("cryptocurrencyEntity")) : null;
+        this.storeEntity = inits.isInitialized("storeEntity") ? new QStoreEntity(forProperty("storeEntity")) : null;
     }
 
 }

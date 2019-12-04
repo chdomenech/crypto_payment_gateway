@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -20,6 +21,8 @@ public class QStoreEntity extends EntityPathBase<StoreEntity> {
     public static final QStoreEntity storeEntity = new QStoreEntity("storeEntity");
 
     public final DateTimePath<java.util.Date> creationDate = createDateTime("creationDate", java.util.Date.class);
+
+    public final ListPath<CryptoCurrencyStoreEntity, QCryptoCurrencyStoreEntity> cryptoCurrencies = this.<CryptoCurrencyStoreEntity, QCryptoCurrencyStoreEntity>createList("cryptoCurrencies", CryptoCurrencyStoreEntity.class, QCryptoCurrencyStoreEntity.class, PathInits.DIRECT2);
 
     public final StringPath email = createString("email");
 

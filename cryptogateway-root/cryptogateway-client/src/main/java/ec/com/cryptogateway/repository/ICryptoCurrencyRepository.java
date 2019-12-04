@@ -1,7 +1,10 @@
 package ec.com.cryptogateway.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Collection;
 
+import org.springframework.transaction.annotation.Transactional;
+
+import ec.com.cryptogateway.base.IQueryDslBaseRepository;
 import ec.com.cryptogateway.entity.CryptoCurrencyEntity;
 
 /**
@@ -10,6 +13,15 @@ import ec.com.cryptogateway.entity.CryptoCurrencyEntity;
  * @author Christian
  *
  */
-public interface ICryptoCurrencyRepository extends JpaRepository<CryptoCurrencyEntity, Integer> {
 
+@Transactional(readOnly = true) 
+public interface ICryptoCurrencyRepository extends IQueryDslBaseRepository<CryptoCurrencyEntity>  {
+	
+	/**
+	 * Find all cryptocurrencys for id
+	 * 
+	 * @param coins
+	 * @return
+	 */
+	Collection<CryptoCurrencyEntity> findCryptoCurrencys(Collection<String>  coins);
 }

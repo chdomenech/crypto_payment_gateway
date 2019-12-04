@@ -2,12 +2,15 @@ package ec.com.cryptogateway.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -61,5 +64,8 @@ public class StoreEntity implements Serializable{
     
     @Column(name = "logo")
 	private String logo;
+    
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "storeEntity")
+    private List<CryptoCurrencyStoreEntity> cryptoCurrencies;
 
 }

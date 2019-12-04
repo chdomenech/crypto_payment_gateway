@@ -22,6 +22,7 @@ import cryptogateway.vo.response.ResponseVO;
 import cryptogateway.vo.response.StoreCryptoCurrenciesVO;
 import cryptogateway.vo.response.StoreVO;
 import ec.com.cryptogateway.entity.CryptoCurrencyEntity;
+import ec.com.cryptogateway.entity.CryptoCurrencyStoreEntity;
 import ec.com.cryptogateway.entity.StoreEntity;
 import ec.com.cryptogateway.repository.ICryptoCurrencyRepository;
 import ec.com.cryptogateway.repository.ICryptoCurrencyStoreRepository;
@@ -276,7 +277,22 @@ public class StoreService implements IStoreService{
 			return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.MESSAGE_ERROR_COINS_NOT_FOUND);			
 		}
 		
-		Collection<CryptoCurrencyEntity> cryptoCurrency = cryptoCurrencyRepository.findCryptoCurrencys();
+		Collection<CryptoCurrencyEntity> cryptoCurrency = cryptoCurrencyRepository.findCryptoCurrencys(cryptoCurrencyVO.getCoins());
+		if(CollectionUtils.isEmpty(cryptoCurrency)) {
+			return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.MESSAGE_ERROR_COINS_NOT_FOUND);			
+		}else{
+			
+			cryptoCurrencyStoreRepository.deleteAllCryptoCurrencyStore(storeEntity.getId());
+			cryptoCurrency.forEach(data->{
+				CryptoCurrencyStoreEntity cryptoCurrencyStoreEntity = new CryptoCurrencyStoreEntity();
+				cryptoCurrencyStoreEntity.setCryptoCurrencyId(data.getId());
+				cryptoCurrencyStoreEntity.setStoreId(storeEntity.getId());
+				cryptoCurrencyStoreEntity.setStatus(Boolean.TRUE);
+				cryptoCurrencyStoreRepository.save(cryptoCurrencyStoreEntity);				
+			});
+			
+			return new ResponseVO(CryptoGatewayConstants.STATUS_SUCCESSFULL, CryptoGatewayConstants.MESSAGE_SUCCESSFULL_COIN_STORE_SAVED);
+		}
 	}
 
 	/**

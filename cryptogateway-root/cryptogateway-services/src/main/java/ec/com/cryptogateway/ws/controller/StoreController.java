@@ -12,6 +12,7 @@ import cryptogateway.vo.request.CredentialsVO;
 import cryptogateway.vo.request.StoreQueryVO;
 import cryptogateway.vo.request.StoreSaveVO;
 import cryptogateway.vo.request.StoreUpdateVO;
+import cryptogateway.vo.response.CryptoCurrencyVO;
 import cryptogateway.vo.response.ResponseVO;
 import ec.com.cryptogateway.service.IStoreService;
 import ec.cryptogateway.utils.CoreUtils;
@@ -131,10 +132,10 @@ public class StoreController {
 	 * @return
 	 */
 	@PostMapping("saveCoinsSelected")
-    public Mono<ResponseVO> saveCoinsSelected(@Valid @RequestBody StoreQueryVO storeQueryVO) {
+    public Mono<ResponseVO> saveCoinsConfiguration(@Valid @RequestBody CryptoCurrencyVO cryptoCurrencyVO) {
 		try {		
 			
-			return Mono.justOrEmpty(CoreUtils.responseSuccessfull(storeService.resendPassword(storeQueryVO)));	
+			return Mono.justOrEmpty(CoreUtils.responseSuccessfull(storeService.saveCoinsConfiguration(cryptoCurrencyVO)));	
 			
 		}catch(Exception e) {
 			

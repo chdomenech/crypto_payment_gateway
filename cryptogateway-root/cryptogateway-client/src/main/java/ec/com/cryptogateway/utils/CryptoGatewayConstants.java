@@ -14,13 +14,15 @@ public class CryptoGatewayConstants {
 	
 	public static final String MESSAGE_ERROR_DATOS_REQUERIDOS= "Debe autenticarse nuevamente, no se han enviado datos requeridos";
 	
-	public static final String MESSAGE_SUCCESSFULL_STORE_SAVED= "Datps registrados exitosamente";
+	public static final String MESSAGE_SUCCESSFULL_STORE_SAVED= "Datos registrados exitosamente";
 	
 	public static final String MESSAGE_SUCCESSFULL_STORE_UPDATED= "Datos actualizados exitosamente";
 	
 	public static final String MESSAGE_SUCCESSFULL_PASSWORD_SENT= "Password reenviado exitosamente";
 	
 	public static final String MESSAGE_ERROR_COINS_NOT_FOUND= "Las criptomonedas no fueron encontradas";
+	
+	public static final String MESSAGE_SUCCESSFULL_COIN_STORE_SAVED= "Criptomonedas guardadas exitosamente";
 	
 	public static final Integer STATUS_SUCCESSFULL= 1;
 	public static final Integer STATUS_WARNING= 2;

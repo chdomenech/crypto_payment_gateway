@@ -34,6 +34,8 @@ public class QCryptoCurrencyEntity extends EntityPathBase<CryptoCurrencyEntity> 
 
     public final StringPath coinId = createString("coinId");
 
+    public final ListPath<CryptoCurrencyStoreEntity, QCryptoCurrencyStoreEntity> cryptoCurrencies = this.<CryptoCurrencyStoreEntity, QCryptoCurrencyStoreEntity>createList("cryptoCurrencies", CryptoCurrencyStoreEntity.class, QCryptoCurrencyStoreEntity.class, PathInits.DIRECT2);
+
     public final NumberPath<Integer> id = createNumber("id", Integer.class);
 
     public final BooleanPath isTokenEthereum = createBoolean("isTokenEthereum");

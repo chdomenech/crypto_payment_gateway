@@ -48,11 +48,14 @@ public class CryptoCurrencyStoreEntity implements Serializable{
     @Column(name = "store_id")
 	private Integer storeId;
     
+    @Column(name = "status")
+    private Boolean status;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cryptocurrency_id", referencedColumnName = "id", insertable = false, updatable = false)
-	private CryptoCurrencyEntity cryptoCurrency;
+	private CryptoCurrencyEntity cryptocurrencyEntity;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", referencedColumnName = "id", insertable = false, updatable = false)
-	private StoreEntity store;
+	private StoreEntity storeEntity;
 }
