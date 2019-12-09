@@ -1,7 +1,10 @@
 package ec.com.cryptogateway.blockchain.service;
 
+import java.util.Collection;
+
 import org.springframework.stereotype.Service;
 
+import cryptogateway.vo.request.TransactionsVO;
 import cryptogateway.vo.response.WalletVO;
 import ec.com.cryptogateway.blockchain.service.IBitcoinService;
 
@@ -20,13 +23,13 @@ public class BitcoinService implements IBitcoinService{
 	}
 
 	@Override
-	public void checkTransaction() {
+	public void sendCoins() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void sendCoins() {
+	public void checkTransaction(Collection<TransactionsVO> transactions) {
 		// TODO Auto-generated method stub
 		
 	}

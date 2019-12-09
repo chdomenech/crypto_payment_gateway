@@ -78,7 +78,13 @@ public class TransactionEntity implements Serializable{
 	private BigDecimal totalPayment;
     
     @Column(name = "blockchain_id")
-   	private Integer blockchainId;
+    private Integer blockchainId;
+    
+    @Column(name = "last_check_date")
+    private Date lastCheckDate;
+    
+    @Column(name = "number_of_checks")
+    private Integer numberOfChecks;
 	
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wallet_id", referencedColumnName = "id", insertable = false, updatable = false)

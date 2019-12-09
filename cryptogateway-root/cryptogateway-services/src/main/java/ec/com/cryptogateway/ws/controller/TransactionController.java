@@ -27,11 +27,20 @@ public class TransactionController {
 	@Autowired
 	private final ITransactionService transactionService;
 	
+	/**
+	 * 	
+	 * @param transactionService
+	 */
 	 public TransactionController(ITransactionService transactionService) {
 	        this.transactionService = transactionService;
 	 }
 	 
-	 @PostMapping("createTransaction")
+	/**
+	 * 
+	 * @param storeQueryVO
+	 * @return
+	 */
+	@PostMapping("createTransaction")
 	public Mono<ResponseVO> createTransaction(@RequestBody StoreQueryVO storeQueryVO) {
 	    try {		
 			return Mono.justOrEmpty(CoreUtils.responseSuccessfull(transactionService.createTransaction(storeQueryVO)));		
@@ -39,5 +48,17 @@ public class TransactionController {
 			log.error("Exception thown in createTransaction {}",e);			
 			 return Mono.justOrEmpty(CoreUtils.responseException(e));			
 		}
-	}	
+	}
+	
+	/**
+	 * 
+	 */
+	@PostMapping("checkTransaction")
+	public void checkTransaction() {
+	    try {		
+			transactionService.checkTransaction();		
+		}catch(Exception e) {
+			log.error("Exception thown in checkTransaction {}",e);		
+		}
+	}
 }

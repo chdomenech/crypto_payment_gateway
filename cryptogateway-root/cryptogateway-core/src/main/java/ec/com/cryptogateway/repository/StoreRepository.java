@@ -15,6 +15,12 @@ import ec.com.cryptogateway.base.JPAQueryDslBaseRepository;
 import ec.com.cryptogateway.entity.QStoreEntity;
 import ec.com.cryptogateway.entity.StoreEntity;
 
+/**
+ * Store Repository
+ * 
+ * @author Christian
+ *
+ */
 @Lazy
 @Repository
 public class StoreRepository extends JPAQueryDslBaseRepository<StoreEntity> implements IStoreRepository {

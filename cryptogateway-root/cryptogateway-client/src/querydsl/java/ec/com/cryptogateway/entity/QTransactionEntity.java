@@ -40,6 +40,10 @@ public class QTransactionEntity extends EntityPathBase<TransactionEntity> {
 
     public final NumberPath<Integer> id = createNumber("id", Integer.class);
 
+    public final DateTimePath<java.util.Date> lastCheckDate = createDateTime("lastCheckDate", java.util.Date.class);
+
+    public final NumberPath<Integer> numberOfChecks = createNumber("numberOfChecks", Integer.class);
+
     public final QStoreEntity store;
 
     public final NumberPath<Integer> storeId = createNumber("storeId", Integer.class);

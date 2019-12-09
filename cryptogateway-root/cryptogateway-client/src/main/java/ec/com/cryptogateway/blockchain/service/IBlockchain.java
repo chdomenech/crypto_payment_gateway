@@ -1,5 +1,8 @@
 package ec.com.cryptogateway.blockchain.service;
 
+import java.util.Collection;
+
+import cryptogateway.vo.request.TransactionsVO;
 import cryptogateway.vo.response.WalletVO;
 
 /**
@@ -20,7 +23,7 @@ public interface IBlockchain {
 	 * Check transaction
 	 * 
 	 */
-	void checkTransaction();
+	void checkTransaction(Collection<TransactionsVO> transactions);
 	
 	/**
 	 * Send coins to wallet

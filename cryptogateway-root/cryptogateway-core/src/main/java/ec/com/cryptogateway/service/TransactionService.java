@@ -1,9 +1,13 @@
 package ec.com.cryptogateway.service;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -12,15 +16,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import cryptogateway.vo.request.StoreQueryVO;
+import cryptogateway.vo.request.TransactionCheckVO;
+import cryptogateway.vo.request.TransactionsVO;
 import cryptogateway.vo.response.ResponseVO;
 import cryptogateway.vo.response.StoreCryptoCurrenciesVO;
 import cryptogateway.vo.response.TransactionVO;
 import cryptogateway.vo.response.WalletVO;
-import ec.com.cryptogateway.blockchain.service.IEthereumService;
 import ec.com.cryptogateway.entity.StoreEntity;
 import ec.com.cryptogateway.entity.TransactionEntity;
 import ec.com.cryptogateway.entity.TransactionStatusEntity;
 import ec.com.cryptogateway.entity.WalletsEntity;
+import ec.com.cryptogateway.repository.IBlockchainRepository;
 import ec.com.cryptogateway.repository.ICryptoCurrencyRepository;
 import ec.com.cryptogateway.repository.IStoreRepository;
 import ec.com.cryptogateway.repository.ITransactionRepository;
@@ -29,21 +35,20 @@ import ec.com.cryptogateway.repository.IWalletsRepository;
 import ec.com.cryptogateway.utils.CryptoGatewayConstants;
 import ec.cryptogateway.utils.CoreUtils;
 import ec.cryptogateway.utils.WalletUtil;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 
  * @author Christian
  *
  */
+@Slf4j
 @Service
 @Transactional
 public class TransactionService implements ITransactionService{
 	
 	@Autowired
 	IStoreService storeService;
-	
-	@Autowired
-	IEthereumService ethereumService;
 	
 	@Autowired
 	ITransactionRepository transactionRepository;
@@ -55,16 +60,21 @@ public class TransactionService implements ITransactionService{
 	IStoreRepository storeRepository;
 	
 	@Autowired
+	IBlockchainRepository blockchainRepository;
+	
+	@Autowired
 	ICryptoCurrencyRepository cryptoCurrencyRepository;
 	
 	@Autowired
 	ITransactionStatusRepository transactionStatusRepository;
+	
+	static String classPackage = "ec.com.cryptogateway.blockchain.service.";
 
 	/**
 	 * 
 	 */
 	@Override
-	public TransactionVO createTransactionT(StoreQueryVO storeQueryVO) {	
+	public ResponseVO createTransaction(StoreQueryVO storeQueryVO) {	
 		
 		TransactionVO transactionVO = new TransactionVO();
 		
@@ -120,24 +130,74 @@ public class TransactionService implements ITransactionService{
 				 transactionVO.setCreationTime(transactionEntity.getCreationTime());
 				 transactionVO.setTransactionId(transactionID);
 				 
+			 }else {
+				 return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.MESSAGE_ERROR_STORE_NOT_FOUND);				 
 			 }
+		 }else {
+			 
+			 return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.MESSAGE_STORE_COINS_CONFIGURATION);
 		 }
 		 
-		 return transactionVO;		
+		 return new ResponseVO(CryptoGatewayConstants.STATUS_SUCCESSFULL, null, transactionVO);
 	}	
 	
-
-	@Override
-	public ResponseVO createTransaction(StoreQueryVO storeQueryVO) {
-		TransactionVO transactionVO = createTransactionT(storeQueryVO);
-		return new ResponseVO(CryptoGatewayConstants.STATUS_SUCCESSFULL, null, transactionVO);
-	}
-	
-
+	/**
+	 * Show history
+	 */
 	@Override
 	public Collection<TransactionVO> showHistory(StoreQueryVO storeQueryVO) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * Check transaction
+	 */
+	@Override
+	public void checkTransaction() {
+		
+		Collection<TransactionCheckVO> blockchains = blockchainRepository.findAllBlockchain();
+		Collection<TransactionsVO>  transactionsVO = transactionRepository.findAllTransactions();
+		
+		Collection<TransactionCheckVO>  transactionsDeleteVO = new ArrayList<>();
+		
+		blockchains.forEach(data->{
+			
+			Collection<TransactionsVO>  transactionVO = 
+					transactionsVO.stream()
+					.filter(transact->transact.getBlockchainId().equals(data.getBlockchainId()))
+					.collect(Collectors.toCollection(ArrayList::new));
+			
+			if(!CollectionUtils.isEmpty(transactionVO)) {
+				data.setTransactionsVO(transactionVO);				
+			}else {
+				transactionsDeleteVO.add(data);				
+			}	
+		});
+		
+		if(!CollectionUtils.isEmpty(transactionsDeleteVO)) {
+			blockchains.removeAll(transactionsDeleteVO);			
+		}		
+		
+		blockchains.forEach(data->{
+			try {
+				Class<?> clase = Class.forName(classPackage.concat(data.getJavaClass()));
+				Constructor<?> cons1 = clase.getConstructor();
+				Method method = clase.getDeclaredMethod("checkTransaction",Collection.class);
+				method.setAccessible(true);
+				method.invoke(cons1.newInstance(),data.getTransactionsVO());
+			}catch (Exception e) {
+				String error= "Error al chequear las transacciones de ".concat(data.getJavaClass()).concat(" {}");
+				log.error(error, e.getMessage());
+			}			
+		});
+		
+	}
+
+	@Override
+	public void updateTransaction(TransactionsVO transactionsVO) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

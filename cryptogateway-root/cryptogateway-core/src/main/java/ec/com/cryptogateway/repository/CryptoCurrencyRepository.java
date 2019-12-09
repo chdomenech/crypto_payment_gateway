@@ -13,6 +13,9 @@ import ec.com.cryptogateway.entity.CryptoCurrencyEntity;
 import ec.com.cryptogateway.entity.QCryptoCurrencyEntity;
 
 /**
+ * 
+ * @author Christian
+ *
  */
 @Lazy
 @Repository

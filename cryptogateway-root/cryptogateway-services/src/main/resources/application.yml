@@ -2,9 +2,10 @@ spring:
   profiles.active: producction
   main:
     web-application-type: reactive
-  autoconfigure:
-    exclude:
-     org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration
+server:
+  port: 8080
+  servlet:
+    context-path: /cryptoGateway
 ---
 spring:
   profiles: develop
@@ -40,5 +41,3 @@ logging:
   level:
     sql: debug
     ROOT: info
-server:
-  port: 8080

@@ -2,8 +2,6 @@ package ec.com.cryptogateway.repository;
 
 import java.util.Collection;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import cryptogateway.vo.request.StoreQueryVO;
 import cryptogateway.vo.response.CryptoCurrencyVO;
 import ec.com.cryptogateway.base.IQueryDslBaseRepository;
@@ -15,7 +13,6 @@ import ec.com.cryptogateway.entity.CryptoCurrencyStoreEntity;
  * @author Christian
  *
  */
-@Transactional(readOnly = true) 
 public interface ICryptoCurrencyStoreRepository extends IQueryDslBaseRepository<CryptoCurrencyStoreEntity>{
 
 	/**

@@ -1,7 +1,9 @@
 package ec.com.cryptogateway.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Collection;
 
+import cryptogateway.vo.request.TransactionsVO;
+import ec.com.cryptogateway.base.IQueryDslBaseRepository;
 import ec.com.cryptogateway.entity.TransactionEntity;
 
 /**
@@ -10,6 +12,13 @@ import ec.com.cryptogateway.entity.TransactionEntity;
  * @author Christian
  *
  */
-public interface ITransactionRepository extends JpaRepository<TransactionEntity,Integer>{
+public interface ITransactionRepository extends  IQueryDslBaseRepository<TransactionEntity> {
 
+	/**
+	 * Find all transactions
+	 * 
+	 * @return
+	 */
+	Collection<TransactionsVO> findAllTransactions();
+	
 }
