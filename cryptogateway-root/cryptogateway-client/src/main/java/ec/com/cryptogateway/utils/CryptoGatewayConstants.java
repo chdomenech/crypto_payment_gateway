@@ -10,7 +10,7 @@ public class CryptoGatewayConstants {
 	public static final String MESSAGE_SUCCESSFULL_USER_FOUND= "Usuario puede autenticarse";
 	public static final String MESSAGE_ERROR_USER_NOT_FOUND= "Usuario o password incorrecto";
 	
-	public static final String MESSAGE_ERROR_STORE_NOT_FOUND= "Debe autenticarse nuevamente, los datos no existen";
+	public static final String MESSAGE_ERROR_STORE_NOT_FOUND= "Los datos de la tienda no existen";
 	
 	public static final String MESSAGE_ERROR_DATOS_REQUERIDOS= "Debe autenticarse nuevamente, no se han enviado datos requeridos";
 	
@@ -23,6 +23,8 @@ public class CryptoGatewayConstants {
 	public static final String MESSAGE_ERROR_COINS_NOT_FOUND= "Las criptomonedas no fueron encontradas";
 	
 	public static final String MESSAGE_SUCCESSFULL_COIN_STORE_SAVED= "Criptomonedas guardadas exitosamente";
+	
+	public static final String URL_INFURA_API_ETHEREUM = "https://mainnet.infura.io/v3/aaedff1ac6064304bee0c5245fbd1a4e";	
 	
 	public static final Integer STATUS_SUCCESSFULL= 1;
 	public static final Integer STATUS_WARNING= 2;
@@ -40,7 +42,7 @@ public class CryptoGatewayConstants {
 	public static final String  INVALID_PASSWORD ="Password invalido";
 
 	public static final String MESSAGE_VALIDATION_WARNING = "Han sucedido errores de validacion";	
-	public static final String MESSAGE_STORE_COINS_CONFIGURATION = "No se ha configurado ninguna moneda para recibir el pago, por favor realicela";
+	public static final String MESSAGE_STORE_COINS_CONFIGURATION = "No se ha configurado ninguna criptomoneda";
 	
 	public static final String INTERNAL_ERROR = "Internal Error";
 	
