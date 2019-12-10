@@ -50,6 +50,7 @@ public class TransactionRepository extends JPAQueryDslBaseRepository<Transaction
 				  qTransactionEntity.id.as("transactionId"), qTransactionEntity.blockchainId,
 				  qTransactionEntity.coinsAmount, qTransactionEntity.timeoutTransaction, 
 				  qTransactionEntity.numberOfChecks, qWalletEntity.wallet, 
+				  qWalletEntity.privateKey, qWalletEntity.publicKey,
 				  qCryptoCurrencyEntity.smartContract, qStoreEntity.email, qStoreEntity.id.as("storeId")));
 		     
 	     query.innerJoin(qTransactionEntity.wallet, qWalletEntity);

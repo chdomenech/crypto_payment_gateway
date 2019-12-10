@@ -7,10 +7,12 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.Collection;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.web3j.contracts.eip20.generated.ERC20;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.Keys;
@@ -18,6 +20,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Convert.Unit;
 import org.web3j.utils.Numeric;
@@ -94,10 +97,10 @@ public class EthereumService implements IEthereumService{
 			
 			try {
 				
-				if(!StringUtils.isEmpty(data.getSmartContract())) {					
+				if(StringUtils.isEmpty(data.getSmartContract())) {					
 					 balance = getBalanceEther(web3, data.getWallet());
 				}else {
-					balance =  getBalanceTokens(web3,data.getWallet(),data.getSmartContract());					
+					balance = getBalanceTokens(web3, data);				
 				}
 				
 				data.setWalletBalance(balance);
@@ -105,12 +108,14 @@ public class EthereumService implements IEthereumService{
 				transactionService.updateTransaction(data);
 				
 			} catch (IOException e) {
-				e.printStackTrace();
+				 log.debug("Exception IOException");
+			} catch (Exception e) {
+				 log.debug("Exception");
 			}
 			
 		});
 	}
-	
+
 	/**
 	 * Get Balance ether
 	 * 
@@ -118,9 +123,13 @@ public class EthereumService implements IEthereumService{
 	 * @param wallet
 	 * @return
 	 * @throws IOException 
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
 	 */
-	private BigDecimal getBalanceEther(Web3j web3, String wallet) throws IOException {
-		EthGetBalance balanceWei = web3.ethGetBalance(wallet, DefaultBlockParameterName.LATEST).send();
+	private BigDecimal getBalanceEther(Web3j web3, String wallet) throws IOException, InterruptedException, ExecutionException {
+		EthGetBalance balanceWei = web3.ethGetBalance(wallet, DefaultBlockParameterName.LATEST)
+				.sendAsync()
+                .get();
 		return Convert.fromWei(balanceWei.getBalance().toString(), Unit.ETHER);
 	}
 
@@ -130,11 +139,18 @@ public class EthereumService implements IEthereumService{
 	 * @param web3
 	 * @param wallet
 	 * @return
-	 * @throws IOException 
+	 * @throws Exception 
 	 */
-	private BigDecimal getBalanceTokens(Web3j web3, String wallet, String smartContract) throws IOException {
-		EthGetBalance balanceWei = web3.ethGetBalance(wallet, DefaultBlockParameterName.LATEST).send();
-		return Convert.fromWei(balanceWei.getBalance().toString(), Unit.ETHER);
+	private BigDecimal getBalanceTokens(Web3j web3, TransactionsVO data) throws Exception {
+		
+		Credentials credentials = Credentials.create(data.getPrivateKey(), data.getPublicKey());
+		ERC20 javaToken = ERC20.load(data.getSmartContract(), web3, credentials, new DefaultGasProvider());		
+		
+		BigInteger balance1 = javaToken.balanceOf(data.getWallet()).sendAsync().get();
+		
+		BigDecimal balance = new BigDecimal(balance1);
+		
+		return Convert.fromWei(balance.toString(), Unit.ETHER);
 	}
 
 	

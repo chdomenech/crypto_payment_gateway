@@ -16,6 +16,8 @@ public class TransactionsVO {
     private Integer blockchainId;
     private String wallet;
     private String smartContract;
+    private String privateKey;
+    private String publicKey;
     private BigDecimal coinsAmount;
     private Integer transactionId;
     private String email;
