@@ -2,6 +2,20 @@ spring:
   profiles.active: producction
   main:
     web-application-type: reactive
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    username: chdomavi@gmail.com
+    password: comsalud23
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    protocol: smtp
+    test-connection: false  
 server:
   port: 8080
   servlet:

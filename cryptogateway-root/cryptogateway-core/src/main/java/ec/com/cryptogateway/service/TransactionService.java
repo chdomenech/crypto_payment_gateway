@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import cryptogateway.vo.request.MailVO;
 import cryptogateway.vo.request.StoreQueryVO;
 import cryptogateway.vo.request.TransactionCheckVO;
 import cryptogateway.vo.request.TransactionsVO;
@@ -68,6 +70,9 @@ public class TransactionService implements ITransactionService{
 	
 	@Autowired
 	ITransactionStatusRepository transactionStatusRepository;
+	
+	@Autowired
+	IEmailService emailService;
 	
 	static String classPackage = "ec.com.cryptogateway.blockchain.service.";
 
@@ -189,8 +194,7 @@ public class TransactionService implements ITransactionService{
                 Object object = method.invoke(cons1.newInstance(),data.getTransactionsVO());
 				updateTransactions(object);
 			}catch (Exception e) {
-				String error= "Error al chequear las transacciones de ".concat(data.getJavaClass()).concat(" {}");
-				log.error(error, e.getMessage());
+				log.error("Error to check transactions {}", e);
 			}			
 		});		
 	}
@@ -218,62 +222,80 @@ public class TransactionService implements ITransactionService{
 	public void updateTransaction(TransactionsVO transactionsVO) {
 		
 		Date actualDate = new Date();
+		MailVO mailVO = null;
 		TransactionEntity transaction = new TransactionEntity();
 		
 	   transaction.setCoinsReceived(transactionsVO.getWalletBalance());
        transaction.setId(transactionsVO.getTransactionId());
        transaction.setLastCheckDate(actualDate);
-       transaction.setNumberOfChecks(transactionsVO.getNumberOfChecks()+1);
-		
+       transaction.setEndTransaction(actualDate);
+       
+       try {
+           transaction.setNumberOfChecks(transactionsVO.getNumberOfChecks()+1);
+       }catch (Exception e) {
+           log.error("Exeption for to set NumberOfChecks {} "+transactionsVO.getTransactionId(), e);
+       }		
        
         if(transactionsVO.getWalletBalance().compareTo(BigDecimal.ZERO)==0 && 
                 (transactionsVO.getTimeoutTransaction().compareTo(actualDate)==0 
                 || transactionsVO.getTimeoutTransaction().compareTo(actualDate)>0)) {            
-        	updateTransactionStatus(transactionsVO,transaction,CryptoGatewayConstants.STATUS_TRANSACTION_TIMEOUT);
+            transaction.setTransactionStatusId(CryptoGatewayConstants.STATUS_TRANSACTION_TIMEOUT); 
+            mailVO = createEmailContent("",transactionsVO);
         }
         
         else if(transactionsVO.getWalletBalance().compareTo(BigDecimal.ZERO)==0 && 
                 (transactionsVO.getTimeoutTransaction().compareTo(actualDate)<0)) {    
             transaction.setTransactionStatusId(CryptoGatewayConstants.STATUS_TRANSACTION_WAITING);
-        	transactionRepository.update(transaction);
+            transaction.setEndTransaction(null);
          } 
         
         else if(transactionsVO.getWalletBalance().compareTo(BigDecimal.ZERO)>0 && 
         		transactionsVO.getWalletBalance().compareTo(transactionsVO.getCoinsAmount())<0) {   
-        	updateTransactionStatus(transactionsVO,transaction,CryptoGatewayConstants.STATUS_TRANSACTION_INCOMPLETE);
-
-        }
-        
+            transaction.setTransactionStatusId(CryptoGatewayConstants.STATUS_TRANSACTION_INCOMPLETE);
+            mailVO = createEmailContent("",transactionsVO);
+        }        
 
         else if(transactionsVO.getWalletBalance().compareTo(transactionsVO.getCoinsAmount())==0 
-        		|| transactionsVO.getWalletBalance().compareTo(transactionsVO.getCoinsAmount())>0){            
-        	transaction.setEndTransaction(actualDate);
-        	updateTransactionStatus(transactionsVO,transaction,CryptoGatewayConstants.STATUS_TRANSACTION_SUCCESSFULL);
-       }       
+        		|| transactionsVO.getWalletBalance().compareTo(transactionsVO.getCoinsAmount())>0){ 
+        	transaction.setTransactionStatusId(CryptoGatewayConstants.STATUS_TRANSACTION_SUCCESSFULL);
+        	mailVO = createEmailContent("",transactionsVO);
+       } 
+        
+        transactionRepository.updateTransaction(transaction); 
+        
+        sendEmailTransaction(mailVO);
 	}
 	
 	/**
-	 * Update Transaction Status
+	 * Create content email transaction Timeout
 	 * 
+	 * @param template
 	 * @param transactionsVO
-	 * @param transaction
-	 * @param status
+	 * @return
 	 */
-	private void updateTransactionStatus(TransactionsVO transactionsVO,TransactionEntity transaction,Integer status) {		
-		transaction.setTransactionStatusId(status);
-		transactionRepository.updateTransaction(transaction);
-		sendEmailTransaction(transactionsVO,transaction);
+	private MailVO createEmailContent(String template,TransactionsVO transactionsVO) {
+	    HashMap<String, Object> parametersMessage = new HashMap<>();
+	    parametersMessage.put("transactiondate", transactionsVO.getTimeoutTransaction());//formato de fecha
+        parametersMessage.put("transactionID", transactionsVO.getTransactionId()); 
+        parametersMessage.put("payment", transactionsVO.getCoinsAmount()); //falta la moneda el simbolo
+        parametersMessage.put("received", transactionsVO.getWalletBalance());
+	    return null;
 	}
 	
 	/**
+	 * Send email transaction
 	 * 
 	 * @param transactionsVO
 	 * @param transaction
 	 */
-	private void sendEmailTransaction(TransactionsVO transactionsVO,TransactionEntity transaction) {
-		
-		log.debug("Envio email {}",transaction.getTransactionStatusId());
-		
+	private void sendEmailTransaction(MailVO mailVO) {
+		try {
+		    if(mailVO!=null) {
+		        emailService.sendMail(mailVO);
+		    }
+        } catch (Exception e) {
+            log.error("Error to sendEmailTransaction {}",e);
+        } 
 	}
 
 }
