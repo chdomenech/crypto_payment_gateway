@@ -2,6 +2,7 @@ package ec.com.cryptogateway.service;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -194,9 +195,68 @@ public class TransactionService implements ITransactionService{
 		
 	}
 
+	/**
+	 * Update Transactions
+	 */
 	@Override
 	public void updateTransaction(TransactionsVO transactionsVO) {
-		// TODO Auto-generated method stub
+		
+		Date actualDate = new Date();
+		TransactionEntity transaction = new TransactionEntity();
+		
+	   transaction.setCoinsReceived(transactionsVO.getWalletBalance());
+       transaction.setId(transactionsVO.getTransactionId());
+       transaction.setLastCheckDate(actualDate);
+       transaction.setNumberOfChecks(transactionsVO.getNumberOfChecks()+1);
+		
+       
+        if(transactionsVO.getWalletBalance().compareTo(BigDecimal.ZERO)==0 && 
+                (transactionsVO.getTimeoutTransaction().compareTo(actualDate)==0 
+                || transactionsVO.getTimeoutTransaction().compareTo(actualDate)==1)) {            
+        	updateTransactionStatus(transactionsVO,transaction,CryptoGatewayConstants.STATUS_TRANSACTION_TIMEOUT);
+        }
+        
+        else if(transactionsVO.getWalletBalance().compareTo(BigDecimal.ZERO)==0 && 
+                (transactionsVO.getTimeoutTransaction().compareTo(actualDate)==-1)) {    
+        	//STATUS_TRANSACTION_WAITING
+        	transactionRepository.update(transaction);
+         } 
+        
+        else if(transactionsVO.getWalletBalance().compareTo(BigDecimal.ZERO)==1 && 
+        		transactionsVO.getWalletBalance().compareTo(transactionsVO.getCoinsAmount())==-1) {   
+        	updateTransactionStatus(transactionsVO,transaction,CryptoGatewayConstants.STATUS_TRANSACTION_INCOMPLETE);
+
+        }
+        
+
+        else if(transactionsVO.getWalletBalance().compareTo(transactionsVO.getCoinsAmount())==0 
+        		|| transactionsVO.getWalletBalance().compareTo(transactionsVO.getCoinsAmount())==1){            
+        	transaction.setEndTransaction(actualDate);
+        	updateTransactionStatus(transactionsVO,transaction,CryptoGatewayConstants.STATUS_TRANSACTION_SUCCESSFULL);
+       }       
+	}
+	
+	/**
+	 * Update Transaction Status
+	 * 
+	 * @param transactionsVO
+	 * @param transaction
+	 * @param status
+	 */
+	private void updateTransactionStatus(TransactionsVO transactionsVO,TransactionEntity transaction,Integer status) {		
+		transaction.setTransactionStatusId(status);
+		transactionRepository.update(transaction);
+		sendEmailTransaction(transactionsVO,transaction);
+	}
+	
+	/**
+	 * 
+	 * @param transactionsVO
+	 * @param transaction
+	 */
+	private void sendEmailTransaction(TransactionsVO transactionsVO,TransactionEntity transaction) {
+		
+		log.debug("Envio email {}",transaction.getTransactionStatusId());
 		
 	}
 

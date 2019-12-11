@@ -6,6 +6,10 @@ public class CryptoGatewayConstants {
 	public static final Integer BITCOIN_BLOCKCHAIN =2;
 
 	public static final Integer STATUS_TRANSACTION_WAITING = 1;
+	public static final Integer STATUS_TRANSACTION_SUCCESSFULL = 2;
+	public static final Integer STATUS_TRANSACTION_ERROR = 3;
+	public static final Integer STATUS_TRANSACTION_TIMEOUT = 4;
+	public static final Integer STATUS_TRANSACTION_INCOMPLETE = 5;
 	
 	public static final String MESSAGE_SUCCESSFULL_USER_FOUND= "Usuario puede autenticarse";
 	public static final String MESSAGE_ERROR_USER_NOT_FOUND= "Usuario o password incorrecto";
