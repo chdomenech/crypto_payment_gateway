@@ -44,8 +44,8 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 @Slf4j
-@Service
 @Transactional
+@Service
 public class TransactionService implements ITransactionService{
 	
 	@Autowired
@@ -158,7 +158,7 @@ public class TransactionService implements ITransactionService{
 	public void checkTransaction() {
 		
 		Collection<TransactionCheckVO> blockchains = blockchainRepository.findAllBlockchain();
-		Collection<TransactionsVO>  transactionsVO = transactionRepository.findAllTransactions();
+		Collection<TransactionsVO> transactionsVO = transactionRepository.findAllTransactions();
 		
 		Collection<TransactionCheckVO>  transactionsDeleteVO = new ArrayList<>();
 		
@@ -186,13 +186,29 @@ public class TransactionService implements ITransactionService{
 				Constructor<?> cons1 = clase.getConstructor();
 				Method method = clase.getDeclaredMethod("checkTransaction",Collection.class);
 				method.setAccessible(true);
-				method.invoke(cons1.newInstance(),data.getTransactionsVO());
+                Object object = method.invoke(cons1.newInstance(),data.getTransactionsVO());
+				updateTransactions(object);
 			}catch (Exception e) {
 				String error= "Error al chequear las transacciones de ".concat(data.getJavaClass()).concat(" {}");
 				log.error(error, e.getMessage());
 			}			
-		});
-		
+		});		
+	}
+	
+	/**
+	 * Update transactions
+	 * 
+	 * @param object
+	 */
+	@SuppressWarnings("unchecked")
+    private void updateTransactions(Object object) {
+	    Collection<TransactionsVO> transactionsVO = null;
+	    if(object!=null) {
+	        transactionsVO = (Collection<TransactionsVO>) object;	 
+	        transactionsVO.forEach(data->{ 
+	            updateTransaction(data);
+	        });	        
+	    }
 	}
 
 	/**
@@ -212,25 +228,25 @@ public class TransactionService implements ITransactionService{
        
         if(transactionsVO.getWalletBalance().compareTo(BigDecimal.ZERO)==0 && 
                 (transactionsVO.getTimeoutTransaction().compareTo(actualDate)==0 
-                || transactionsVO.getTimeoutTransaction().compareTo(actualDate)==1)) {            
+                || transactionsVO.getTimeoutTransaction().compareTo(actualDate)>0)) {            
         	updateTransactionStatus(transactionsVO,transaction,CryptoGatewayConstants.STATUS_TRANSACTION_TIMEOUT);
         }
         
         else if(transactionsVO.getWalletBalance().compareTo(BigDecimal.ZERO)==0 && 
-                (transactionsVO.getTimeoutTransaction().compareTo(actualDate)==-1)) {    
-        	//STATUS_TRANSACTION_WAITING
+                (transactionsVO.getTimeoutTransaction().compareTo(actualDate)<0)) {    
+            transaction.setTransactionStatusId(CryptoGatewayConstants.STATUS_TRANSACTION_WAITING);
         	transactionRepository.update(transaction);
          } 
         
-        else if(transactionsVO.getWalletBalance().compareTo(BigDecimal.ZERO)==1 && 
-        		transactionsVO.getWalletBalance().compareTo(transactionsVO.getCoinsAmount())==-1) {   
+        else if(transactionsVO.getWalletBalance().compareTo(BigDecimal.ZERO)>0 && 
+        		transactionsVO.getWalletBalance().compareTo(transactionsVO.getCoinsAmount())<0) {   
         	updateTransactionStatus(transactionsVO,transaction,CryptoGatewayConstants.STATUS_TRANSACTION_INCOMPLETE);
 
         }
         
 
         else if(transactionsVO.getWalletBalance().compareTo(transactionsVO.getCoinsAmount())==0 
-        		|| transactionsVO.getWalletBalance().compareTo(transactionsVO.getCoinsAmount())==1){            
+        		|| transactionsVO.getWalletBalance().compareTo(transactionsVO.getCoinsAmount())>0){            
         	transaction.setEndTransaction(actualDate);
         	updateTransactionStatus(transactionsVO,transaction,CryptoGatewayConstants.STATUS_TRANSACTION_SUCCESSFULL);
        }       
@@ -245,7 +261,7 @@ public class TransactionService implements ITransactionService{
 	 */
 	private void updateTransactionStatus(TransactionsVO transactionsVO,TransactionEntity transaction,Integer status) {		
 		transaction.setTransactionStatusId(status);
-		transactionRepository.update(transaction);
+		transactionRepository.updateTransaction(transaction);
 		sendEmailTransaction(transactionsVO,transaction);
 	}
 	

@@ -23,7 +23,7 @@ public interface IBlockchain {
 	 * Check transaction
 	 * 
 	 */
-	void checkTransaction(Collection<TransactionsVO> transactions);
+	Collection<TransactionsVO> checkTransaction(Collection<TransactionsVO> transactions);
 	
 	/**
 	 * Send coins to wallet
