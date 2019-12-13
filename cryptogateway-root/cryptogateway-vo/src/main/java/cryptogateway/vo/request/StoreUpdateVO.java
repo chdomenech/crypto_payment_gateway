@@ -11,14 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StoreUpdateVO {
 	
-	private String storeName;
-	
-	private String password;
-	
+	private String storeName;	
+	private String password;	
 	private String repeatPassword;	
-	
-	private String storeUID;
-		
+	private String storeUID;		
 	private Integer id;
 
 }

@@ -1,4 +1,4 @@
-package cryptogateway.vo.response;
+package cryptogateway.vo.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class WalletVO {
+public class WalletCredentialsVO {
 	
-	private String walletAddress;
-	private String privateKey;
-	private Integer blockchainId;
+	private String wallet;
 	private String publicKey;
-	private String smartContract;
+	private Integer atmPassword;
+	private String walletType;
+
 }

@@ -17,8 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import cryptogateway.vo.request.StoreQueryVO;
+import cryptogateway.vo.request.TransactionATMVO;
 import cryptogateway.vo.request.TransactionCheckVO;
 import cryptogateway.vo.request.TransactionsVO;
+import cryptogateway.vo.request.WalletCredentialsVO;
 import cryptogateway.vo.response.ResponseVO;
 import cryptogateway.vo.response.StoreCryptoCurrenciesVO;
 import cryptogateway.vo.response.TransactionVO;
@@ -29,6 +31,7 @@ import ec.com.cryptogateway.entity.TransactionStatusEntity;
 import ec.com.cryptogateway.entity.WalletsEntity;
 import ec.com.cryptogateway.repository.IBlockchainRepository;
 import ec.com.cryptogateway.repository.ICryptoCurrencyRepository;
+import ec.com.cryptogateway.repository.ICryptoCurrencyStoreRepository;
 import ec.com.cryptogateway.repository.IStoreRepository;
 import ec.com.cryptogateway.repository.ITransactionRepository;
 import ec.com.cryptogateway.repository.ITransactionStatusRepository;
@@ -67,6 +70,9 @@ public class TransactionService implements ITransactionService{
 	ICryptoCurrencyRepository cryptoCurrencyRepository;
 	
 	@Autowired
+	ICryptoCurrencyStoreRepository cryptoCurrencyStoreRepository;
+	
+	@Autowired
 	ITransactionStatusRepository transactionStatusRepository;
 	
 	static String classPackage = "ec.com.cryptogateway.blockchain.service.";
@@ -91,7 +97,7 @@ public class TransactionService implements ITransactionService{
 				 Optional <TransactionStatusEntity> transactionStatus= transactionStatusRepository.
 						 findById(CryptoGatewayConstants.STATUS_TRANSACTION_WAITING);
 				 
-				 WalletVO walletVO = WalletUtil.generateWallet(dataTransaction);			 
+				 WalletVO walletVO = WalletUtil.generateWallet(dataTransaction);	
 				 
 				 WalletsEntity walletEntity = new WalletsEntity();
 				 walletEntity.setPrivateKey(walletVO.getPrivateKey());
@@ -99,6 +105,7 @@ public class TransactionService implements ITransactionService{
 				 walletEntity.setStoreId(storeEntity.getId());
 				 walletEntity.setBlockchainId(dataTransaction.getBlockchainId());
 				 walletEntity.setPublicKey(walletVO.getPublicKey());
+				 walletEntity.setWalletType(CryptoGatewayConstants.TYPE_WALLET_PAYMENT_BUTTON);
 				 walletsRepository.save(walletEntity);
 				 
 				 TransactionEntity transactionEntity = new TransactionEntity();
@@ -218,7 +225,6 @@ public class TransactionService implements ITransactionService{
         
         else if(transactionsVO.getWalletBalance().compareTo(BigDecimal.ZERO)==0 && 
                 (transactionsVO.getTimeoutTransaction().compareTo(actualDate)==-1)) {    
-        	//STATUS_TRANSACTION_WAITING
         	transactionRepository.update(transaction);
          } 
         
@@ -234,6 +240,47 @@ public class TransactionService implements ITransactionService{
         	transaction.setEndTransaction(actualDate);
         	updateTransactionStatus(transactionsVO,transaction,CryptoGatewayConstants.STATUS_TRANSACTION_SUCCESSFULL);
        }       
+	}
+	
+	/**
+	 * Create an transaction ATM
+	 * 
+	 */
+	@Override
+	public ResponseVO createTransactionATM(TransactionATMVO transactionATMVO) {
+		
+		WalletCredentialsVO walletCredentialsVO = new WalletCredentialsVO();
+		walletCredentialsVO.setAtmPassword(transactionATMVO.getAtmPassword());
+		walletCredentialsVO.setPublicKey(transactionATMVO.getPublicKey());
+		walletCredentialsVO.setWallet(transactionATMVO.getWallet());
+		walletCredentialsVO.setWalletType(CryptoGatewayConstants.TYPE_WALLET_CARD);	
+		
+		WalletVO walletVO = walletsRepository.findWalletByCredentials(walletCredentialsVO);
+		if(walletVO==null) {
+			 return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.ERROR_ATM_ACCOUNT_NOT_FOUND);			
+		}
+		
+		StoreQueryVO storeQueryVO = new StoreQueryVO();
+		storeQueryVO.setCoinId(transactionATMVO.getCoindId());
+		storeQueryVO.setStoreUI(transactionATMVO.getStoreUI());
+		
+		
+		if(cryptoCurrencyStoreRepository.checkStoreAcceptCoin(storeQueryVO)){
+			//ERROR LA TIENDA NO ACEPTA ESTE TIPO DE CRIPTOMONEDAS			
+		}
+		
+		//if(!checkAmountAvailable()) {
+			// mas el monto del fee
+			//coinId necesito encontrar la cryptomenda y luego 
+			//buscar con la wallet, monto, smarcontrac el monto disponible de la wallet que no esté comprometido.			
+		//}
+		
+		//createTransaction();//Creo la wallet de la tienda y  y es la que se va usar para el withdral
+		
+		//analiza la respuesta del withdrawl;
+		
+		return null;
+		
 	}
 	
 	/**

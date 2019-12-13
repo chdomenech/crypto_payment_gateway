@@ -11,6 +11,19 @@ public class CryptoGatewayConstants {
 	public static final Integer STATUS_TRANSACTION_TIMEOUT = 4;
 	public static final Integer STATUS_TRANSACTION_INCOMPLETE = 5;
 	
+	public static final String TYPE_WALLET_CARD ="WC";
+	
+	public static final String TYPE_WALLET_PAYMENT_BUTTON ="PB";
+	
+	public static final String TYPE_WALLET_PLUGIN ="PG";
+	
+	public static final String TYPE_WALLET_STORE_TRANSACTION ="ST";
+	
+	public static final String ERROR_ATM_ACCOUNT_NOT_FOUND="ERROR LA CUENTA DE CRIPTOMONEDAS NO EXISTE";
+	public static final String ERROR_ATM_STORE_NOT_ACCEPT_COIN="ERROR LA TIENDA NO ACEPTA ESTE TIPO DE CRIPTOMONEDAS";
+	public static final String ERROR_ATM_WALLET_NOT_HAVE_FUNDS="ERROR LA CUENTA NO TIENE SUFICIENTES FONDOS";
+	
+	
 	public static final String MESSAGE_SUCCESSFULL_USER_FOUND= "Usuario puede autenticarse";
 	public static final String MESSAGE_ERROR_USER_NOT_FOUND= "Usuario o password incorrecto";
 	

@@ -61,6 +61,13 @@ public class WalletsEntity implements Serializable{
     @Column(name = "store_id")
 	private Integer storeId;
     
+    @Column(name = "atm_password")
+	private Integer atmPassword;
+    
+    @Column(name = "wallet_type")
+	private String walletType;
+    
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "blockchain_id", referencedColumnName = "id", insertable = false, updatable = false)
 	private BlockchainEntity blockchain;

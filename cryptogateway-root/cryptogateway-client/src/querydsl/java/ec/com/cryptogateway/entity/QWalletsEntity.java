@@ -22,6 +22,8 @@ public class QWalletsEntity extends EntityPathBase<WalletsEntity> {
 
     public static final QWalletsEntity walletsEntity = new QWalletsEntity("walletsEntity");
 
+    public final StringPath atmPassword = createString("atmPassword");
+
     public final QBlockchainEntity blockchain;
 
     public final NumberPath<Integer> blockchainId = createNumber("blockchainId", Integer.class);
@@ -39,6 +41,8 @@ public class QWalletsEntity extends EntityPathBase<WalletsEntity> {
     public final NumberPath<Integer> storeId = createNumber("storeId", Integer.class);
 
     public final StringPath wallet = createString("wallet");
+
+    public final StringPath walletType = createString("walletType");
 
     public QWalletsEntity(String variable) {
         this(WalletsEntity.class, forVariable(variable), INITS);

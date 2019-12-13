@@ -90,5 +90,31 @@ public class CryptoCurrencyStoreRepository extends JPAQueryDslBaseRepository<Cry
 	    return query.execute()>0;
 	}
 
+	/**
+	 * Check if the store accept this type cryptocurrency
+	 * 
+	 * @param storeQueryVO
+	 * @return
+	 */
+	@Override
+	public boolean checkStoreAcceptCoin(StoreQueryVO storeQueryVO) {
+		
+		QCryptoCurrencyStoreEntity qCryptoCurrencyStoreEntity = QCryptoCurrencyStoreEntity.cryptoCurrencyStoreEntity;
+		QStoreEntity qStoreEntity = QStoreEntity.storeEntity;
+		QCryptoCurrencyEntity qCryptoCurrencyEntity = QCryptoCurrencyEntity.cryptoCurrencyEntity;
+		
+		 JPQLQuery<CryptoCurrencyStoreEntity> query = from(qCryptoCurrencyStoreEntity);
+	     
+	     query.innerJoin(qCryptoCurrencyStoreEntity.storeEntity, qStoreEntity);
+	     query.innerJoin(qCryptoCurrencyStoreEntity.cryptocurrencyEntity, qCryptoCurrencyEntity);
+	    
+		 BooleanBuilder where = new BooleanBuilder();	     
+		 where.and(qStoreEntity.storeUI.eq(storeQueryVO.getStoreUI()));
+		 where.and(qCryptoCurrencyEntity.coinId.eq(storeQueryVO.getCoinId()));
+		 query.where(where);
+		 
+		 return query.fetchCount()>0;
+		
+	}
 
 }

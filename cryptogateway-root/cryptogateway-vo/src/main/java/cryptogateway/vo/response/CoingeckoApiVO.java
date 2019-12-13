@@ -20,11 +20,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CoingeckoApiVO {
 	
-	String id;
-	String symbol;
-	String name;
-	LinkedHashMap<String, String> image;	
+	private String id;
+	private String symbol;
+	private String name;
+	private LinkedHashMap<String, String> image;	
 	
 	@JsonProperty("market_data")
-	LinkedHashMap<Object, Object> marketData;
+	private LinkedHashMap<Object, Object> marketData;
 }

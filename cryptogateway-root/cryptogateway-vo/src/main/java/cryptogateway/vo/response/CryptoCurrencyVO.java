@@ -18,15 +18,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CryptoCurrencyVO {
 	
-	String coinId;
-	String apiUrl;
-	String apiUrl1;
-	String apiUrl2;
-	Integer idCoin;
-	Integer idStore;
-	Integer blockchainId;
-	String blockchainName;
-	String javaClass;
-	Integer timeoutMinuts;
-	Collection<String> coins;
+	private String coinId;
+	private String apiUrl;
+	private String apiUrl1;
+	private String apiUrl2;
+	private Integer idCoin;
+	private String smartContract;
+	private Integer idStore;
+	private Integer blockchainId;
+	private String blockchainName;
+	private String javaClass;
+	private Integer timeoutMinuts;
+	private Collection<String> coins;
 }
