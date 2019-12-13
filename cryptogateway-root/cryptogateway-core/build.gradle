@@ -4,6 +4,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	compile group: 'org.hibernate', name: 'hibernate-entitymanager'
 	compile group: 'org.springframework', name: 'spring-web'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail'	
 	compile group: 'org.web3j', name: 'core', version: '4.5.5'
 	compile group: 'org.web3j', name: 'contracts', version: '4.5.5'
 	compile group: 'org.bitcoinj', name: 'bitcoinj-core', version: '0.14.7'	

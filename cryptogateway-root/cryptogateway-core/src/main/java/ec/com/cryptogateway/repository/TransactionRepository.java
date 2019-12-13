@@ -65,4 +65,22 @@ public class TransactionRepository extends JPAQueryDslBaseRepository<Transaction
 	     return query.fetch();
 		
 	}
+
+	/**
+	 * Update transaction
+	 * 
+	 */
+    @Override
+    public void updateTransaction(TransactionEntity transactionEntity) {
+        QTransactionEntity qTransactionEntity = QTransactionEntity.transactionEntity;
+        BooleanBuilder where = new BooleanBuilder();
+        where.and(qTransactionEntity.id.eq(transactionEntity.getId()));
+        update(qTransactionEntity).where(where)
+        .set(qTransactionEntity.coinsReceived, transactionEntity.getCoinsReceived())
+        .set(qTransactionEntity.lastCheckDate, transactionEntity.getLastCheckDate())
+        .set(qTransactionEntity.numberOfChecks, transactionEntity.getNumberOfChecks())       
+         .set(qTransactionEntity.transactionStatusId, transactionEntity.getTransactionStatusId()).execute();
+
+        
+    }
 }

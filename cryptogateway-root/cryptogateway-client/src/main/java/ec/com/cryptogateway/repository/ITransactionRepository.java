@@ -21,4 +21,11 @@ public interface ITransactionRepository extends  IQueryDslBaseRepository<Transac
 	 */
 	Collection<TransactionsVO> findAllTransactions();
 	
-}
+	/**
+	 * Update transaction
+	 * 
+	 * @param transactionEntity
+	 */
+	void updateTransaction(TransactionEntity transactionEntity);
+	
+} 

@@ -14,6 +14,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class WalletUtil {
+    
+    private WalletUtil() {
+
+    }
 
 	/**
 	 * Generate a Wallet with private key
@@ -25,9 +29,8 @@ public class WalletUtil {
 	public static WalletVO generateWallet(StoreCryptoCurrenciesVO dataTransaction) {
 		WalletVO walletVO = null;
 		String classPackage = "ec.com.cryptogateway.blockchain.service.";
-		classPackage= classPackage.concat(dataTransaction.getJavaClass());
 		try {
-			Class<?> clase = Class.forName(classPackage);
+			Class<?> clase = Class.forName(classPackage.concat(dataTransaction.getJavaClass()));
 			Constructor<?> cons1 = clase.getConstructor();
 			Method method = clase.getDeclaredMethod("createWallet");
 			method.setAccessible(true);

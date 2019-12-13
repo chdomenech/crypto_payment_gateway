@@ -165,28 +165,28 @@ public class StoreService implements IStoreService{
 		
 		ResponseVO responseVO = null;
 		
-		Collection<String> errorsList = new ArrayList<String>();
+		Collection<String> errorsList = new ArrayList<>();
 		
 		/* Validate if the store exist  */
 		StoreQueryVO storeQueryVO = new StoreQueryVO();
 		storeQueryVO.setEmail(storeSaveVO.getEmail());		
-		if(storeRepository.isExist(storeQueryVO)) {
+		if(storeRepository.isExist(storeQueryVO).booleanValue()) {
 			errorsList.add(CryptoGatewayConstants.EMAIL_EXIST);			
 		}
 		
 		storeQueryVO = new StoreQueryVO();
 		storeQueryVO.setUser(storeSaveVO.getUser());
-		if(storeRepository.isExist(storeQueryVO)) {
+		if(storeRepository.isExist(storeQueryVO).booleanValue()) {
 			errorsList.add(CryptoGatewayConstants.USER_EXIST);					
 		}
 		
 		storeQueryVO = new StoreQueryVO();
 		storeQueryVO.setStoreName(storeSaveVO.getStoreName());
-		if(storeRepository.isExist(storeQueryVO)) {
+		if(storeRepository.isExist(storeQueryVO).booleanValue()) {
 			errorsList.add(CryptoGatewayConstants.STORE_NAME_EXIST);		
 		}
 		
-		if(errorsList.size()>0) {
+		if(!errorsList.isEmpty()) {
 			responseVO =  new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.MESSAGE_VALIDATION_WARNING,null,errorsList);
 		}
 		
