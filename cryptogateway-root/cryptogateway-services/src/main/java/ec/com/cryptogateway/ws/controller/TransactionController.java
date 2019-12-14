@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cryptogateway.vo.request.StoreQueryVO;
+import cryptogateway.vo.request.TransactionATMVO;
 import cryptogateway.vo.response.ResponseVO;
 import ec.com.cryptogateway.service.ITransactionService;
 import ec.cryptogateway.utils.CoreUtils;
@@ -46,6 +47,21 @@ public class TransactionController {
 			return Mono.justOrEmpty(CoreUtils.responseSuccessfull(transactionService.createTransaction(storeQueryVO)));		
 		}catch(Exception e) {
 			log.error("Exception thown in createTransaction {}",e);			
+			 return Mono.justOrEmpty(CoreUtils.responseException(e));			
+		}
+	}
+	
+	/**
+	 * 
+	 * @param transactionATMVO
+	 * @return
+	 */
+	@PostMapping("createTransactionATM")
+	public Mono<ResponseVO> createTransactionATM(@RequestBody TransactionATMVO transactionATMVO) {
+	    try {		
+			return Mono.justOrEmpty(CoreUtils.responseSuccessfull(transactionService.createTransactionATM(transactionATMVO)));		
+		}catch(Exception e) {
+			log.error("Exception thown in createTransactionATM {}",e);			
 			 return Mono.justOrEmpty(CoreUtils.responseException(e));			
 		}
 	}

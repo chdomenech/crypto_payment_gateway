@@ -1,6 +1,7 @@
 package ec.com.cryptogateway.service;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import cryptogateway.vo.request.TransactionATMVO;
 import cryptogateway.vo.request.TransactionCheckVO;
 import cryptogateway.vo.request.TransactionsVO;
 import cryptogateway.vo.request.WalletCredentialsVO;
+import cryptogateway.vo.response.CryptoCurrencyVO;
 import cryptogateway.vo.response.ResponseVO;
 import cryptogateway.vo.response.StoreCryptoCurrenciesVO;
 import cryptogateway.vo.response.TransactionVO;
@@ -194,16 +196,38 @@ public class TransactionService implements ITransactionService{
 		
 		blockchains.forEach(data->{
 			try {
-				Class<?> clase = Class.forName(classPackage.concat(data.getJavaClass()));
-				Constructor<?> cons1 = clase.getConstructor();
-				Method method = clase.getDeclaredMethod("checkTransaction",Collection.class);
-				method.setAccessible(true);
-                Object object = method.invoke(cons1.newInstance(),data.getTransactionsVO());
+                Object object =  checkBalanceWallet(data.getJavaClass(),data.getTransactionsVO());
 				updateTransactions(object);
 			}catch (Exception e) {
 				log.error("Error to check transactions {}", e);
 			}			
 		});		
+	}
+	
+	/**
+	 * Check balance of a wallet
+	 * 
+	 * @param javaClass
+	 * @param transactionCheckVO
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws InstantiationException
+	 */
+	private Object checkBalanceWallet(String javaClass,Collection<TransactionsVO> transactionCheckVO) throws ClassNotFoundException, 
+	NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, 
+	InvocationTargetException, InstantiationException {
+		
+		Class<?> clase = Class.forName(classPackage.concat(javaClass));
+		Constructor<?> cons1 = clase.getConstructor();
+		Method method = clase.getDeclaredMethod("checkTransaction",Collection.class);
+		method.setAccessible(true);
+        return method.invoke(cons1.newInstance(),transactionCheckVO);	
+		
 	}
 	
 	/**
@@ -286,6 +310,7 @@ public class TransactionService implements ITransactionService{
         parametersMessage.put("transactionID", transactionsVO.getTransactionId()); 
         parametersMessage.put("payment", transactionsVO.getCoinsAmount()); //falta la moneda el simbolo
         parametersMessage.put("received", transactionsVO.getWalletBalance());
+        parametersMessage.put("coinId", transactionsVO.getBlockchainId());//Coin ID
 	    return null;
 	}
 	
@@ -326,10 +351,11 @@ public class TransactionService implements ITransactionService{
 		storeQueryVO.setCoinId(transactionATMVO.getCoindId());
 		storeQueryVO.setStoreUI(transactionATMVO.getStoreUI());
 		
-		
-		if(cryptoCurrencyStoreRepository.checkStoreAcceptCoin(storeQueryVO)){
-			//ERROR LA TIENDA NO ACEPTA ESTE TIPO DE CRIPTOMONEDAS			
+		CryptoCurrencyVO cryptoCurrencyVO = cryptoCurrencyStoreRepository.checkStoreAcceptCoin(storeQueryVO);
+		if(cryptoCurrencyVO==null){
+			 return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.ERROR_ATM_STORE_NOT_ACCEPT_COIN);		
 		}
+		
 		
 		//if(!checkAmountAvailable()) {
 			// mas el monto del fee

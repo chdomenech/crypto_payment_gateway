@@ -22,7 +22,7 @@ public class QWalletsEntity extends EntityPathBase<WalletsEntity> {
 
     public static final QWalletsEntity walletsEntity = new QWalletsEntity("walletsEntity");
 
-    public final StringPath atmPassword = createString("atmPassword");
+    public final NumberPath<Integer> atmPassword = createNumber("atmPassword", Integer.class);
 
     public final QBlockchainEntity blockchain;
 

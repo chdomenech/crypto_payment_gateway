@@ -40,8 +40,7 @@ public class WalletsRepository extends JPAQueryDslBaseRepository<WalletsEntity> 
         QWalletsEntity qWalletsEntity = QWalletsEntity.walletsEntity;
         
         JPQLQuery<WalletVO> query = from(qWalletsEntity).select(Projections.bean(WalletVO.class, 
-                qWalletsEntity.privateKey, qWalletsEntity.publicKey, qWalletsEntity.blockchain, 
-                qWalletsEntity.wallet.as("walletAddress")));
+                qWalletsEntity.privateKey, qWalletsEntity.publicKey, qWalletsEntity.wallet.as("walletAddress")));
         
         BooleanBuilder where = new BooleanBuilder();
         where.and(qWalletsEntity.walletType.eq(walletCredentialsVO.getWalletType()));

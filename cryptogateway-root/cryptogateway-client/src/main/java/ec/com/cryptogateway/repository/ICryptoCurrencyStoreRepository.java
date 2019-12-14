@@ -38,6 +38,6 @@ public interface ICryptoCurrencyStoreRepository extends IQueryDslBaseRepository<
 	 * @param storeQueryVO
 	 * @return
 	 */
-	boolean checkStoreAcceptCoin(StoreQueryVO storeQueryVO);
+	CryptoCurrencyVO checkStoreAcceptCoin(StoreQueryVO storeQueryVO);
 	
 }

@@ -97,13 +97,15 @@ public class CryptoCurrencyStoreRepository extends JPAQueryDslBaseRepository<Cry
 	 * @return
 	 */
 	@Override
-	public boolean checkStoreAcceptCoin(StoreQueryVO storeQueryVO) {
+	public CryptoCurrencyVO checkStoreAcceptCoin(StoreQueryVO storeQueryVO) {
 		
 		QCryptoCurrencyStoreEntity qCryptoCurrencyStoreEntity = QCryptoCurrencyStoreEntity.cryptoCurrencyStoreEntity;
 		QStoreEntity qStoreEntity = QStoreEntity.storeEntity;
 		QCryptoCurrencyEntity qCryptoCurrencyEntity = QCryptoCurrencyEntity.cryptoCurrencyEntity;
 		
-		 JPQLQuery<CryptoCurrencyStoreEntity> query = from(qCryptoCurrencyStoreEntity);
+		 JPQLQuery<CryptoCurrencyVO> query = from(qCryptoCurrencyStoreEntity).select(Projections.bean(CryptoCurrencyVO.class,
+	    		 qCryptoCurrencyStoreEntity.storeId.as("idStore"), qCryptoCurrencyEntity.smartContract, qCryptoCurrencyEntity.blockchainId,
+	    		 qCryptoCurrencyEntity.id.as("idCoin"), qCryptoCurrencyEntity.coinId, qCryptoCurrencyEntity.smartContract));
 	     
 	     query.innerJoin(qCryptoCurrencyStoreEntity.storeEntity, qStoreEntity);
 	     query.innerJoin(qCryptoCurrencyStoreEntity.cryptocurrencyEntity, qCryptoCurrencyEntity);
@@ -113,7 +115,7 @@ public class CryptoCurrencyStoreRepository extends JPAQueryDslBaseRepository<Cry
 		 where.and(qCryptoCurrencyEntity.coinId.eq(storeQueryVO.getCoinId()));
 		 query.where(where);
 		 
-		 return query.fetchCount()>0;
+		 return query.fetchFirst();
 		
 	}
 

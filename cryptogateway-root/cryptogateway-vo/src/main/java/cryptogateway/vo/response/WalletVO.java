@@ -15,5 +15,4 @@ public class WalletVO {
 	private String privateKey;
 	private Integer blockchainId;
 	private String publicKey;
-	private String smartContract;
 }
