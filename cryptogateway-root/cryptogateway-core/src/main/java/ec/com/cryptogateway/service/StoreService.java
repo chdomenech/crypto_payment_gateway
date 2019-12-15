@@ -50,6 +50,9 @@ public class StoreService implements IStoreService{
     
     @Autowired
     private ICryptoCurrencyStoreRepository cryptoCurrencyStoreRepository;
+    
+    @Autowired
+    IEmailService emailService;
 
    
     /**
@@ -85,7 +88,7 @@ public class StoreService implements IStoreService{
 		
 		List<StoreCryptoCurrenciesVO> storeCryptoCurrencies= findCoinsForUIstore(storeQueryVO);
 		
-		if(storeCryptoCurrencies.size()>0) {		
+		if(!storeCryptoCurrencies.isEmpty()) {		
 			return new ResponseVO(CryptoGatewayConstants.FULL_LIST, null, storeCryptoCurrencies);	
 		}else {	
 			return new ResponseVO(CryptoGatewayConstants.EMPTY_LIST, CryptoGatewayConstants.MESSAGE_STORE_COINS_CONFIGURATION, storeCryptoCurrencies);
@@ -141,20 +144,11 @@ public class StoreService implements IStoreService{
 		storeRepository.save(storeEntity);
 		
 		//send Email
-		sendEmail(storeEntity);
+		emailService.sendMail(null);
 	
 		return new ResponseVO(CryptoGatewayConstants.STATUS_SUCCESSFULL, CryptoGatewayConstants.MESSAGE_SUCCESSFULL_STORE_SAVED);
 	}
 	
-	/**
-	 * Send email
-	 * 
-	 * @param storeEntity
-	 */
-	private void sendEmail(StoreEntity storeEntity) {
-		
-		
-	}
 	
 	/**
 	 * Validate if store exist
@@ -248,7 +242,10 @@ public class StoreService implements IStoreService{
 		}else {
 			
 			String password = AES256.decrypt(storeEntity.getPassword(), AES256.SECRET_KEY);						
-			sendEmail(null);			
+
+			//send Email
+	        emailService.sendMail(null);
+			
 			return new ResponseVO(CryptoGatewayConstants.STATUS_SUCCESSFULL, 
 					CryptoGatewayConstants.MESSAGE_SUCCESSFULL_STORE_UPDATED);
 		}
@@ -308,7 +305,7 @@ public class StoreService implements IStoreService{
 		StoreQueryVO storeQueryVO = new StoreQueryVO();
 		storeQueryVO.setId(storeUpdateVO.getId());
 		
-		if(storeUpdateVO == null || storeUpdateVO.getId() == null) {
+		if(storeUpdateVO.getId() == null) {
 			return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.MESSAGE_ERROR_DATOS_REQUERIDOS);	
 		}
 		
@@ -336,7 +333,7 @@ public class StoreService implements IStoreService{
 			storeRepository.update(storeEntity);
 			
 			//send Email
-			sendEmail(storeEntity);
+	        emailService.sendMail(null);
 				
 			return new ResponseVO(CryptoGatewayConstants.STATUS_SUCCESSFULL, CryptoGatewayConstants.MESSAGE_SUCCESSFULL_STORE_UPDATED);
 			

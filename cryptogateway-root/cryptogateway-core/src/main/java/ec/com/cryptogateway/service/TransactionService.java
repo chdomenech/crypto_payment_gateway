@@ -113,6 +113,7 @@ public class TransactionService implements ITransactionService{
 				 walletEntity.setBlockchainId(dataTransaction.getBlockchainId());
 				 walletEntity.setPublicKey(walletVO.getPublicKey());
 				 walletEntity.setWalletType(CryptoGatewayConstants.TYPE_WALLET_PAYMENT_BUTTON);
+				 walletEntity.setCreationDate(new Date());
 				 walletsRepository.save(walletEntity);
 				 
 				 TransactionEntity transactionEntity = new TransactionEntity();
@@ -131,7 +132,7 @@ public class TransactionService implements ITransactionService{
 				 transactionEntity.setCoinsAmount(dataTransaction.getCryptoCurrencyConversion());				 
 				 transactionEntity.setCreationTime(new Date());		
 				 transactionEntity.setTimeoutTransaction(CoreUtils.addTimeToDate(dataTransaction.getTimeoutMinuts(), 
-						 transactionEntity.getCreationTime()));
+				 transactionEntity.getCreationTime()));
 				 transactionEntity.setTotalPayment(dataTransaction.getTotalPayment());
 				 		 
 				 transactionRepository.save(transactionEntity);		 
@@ -360,7 +361,7 @@ public class TransactionService implements ITransactionService{
 		//if(!checkAmountAvailable()) {
 			// mas el monto del fee
 			//coinId necesito encontrar la cryptomenda y luego 
-			//buscar con la wallet, monto, smarcontrac el monto disponible de la wallet que no esté comprometido.			
+			//buscar con la wallet, monto, smarcontrac el monto disponible de la wallet que no estï¿½ comprometido.			
 		//}
 		
 		//createTransaction();//Creo la wallet de la tienda y  y es la que se va usar para el withdral
