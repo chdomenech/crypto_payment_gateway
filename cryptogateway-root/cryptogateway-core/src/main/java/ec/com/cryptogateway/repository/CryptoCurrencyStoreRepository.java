@@ -74,6 +74,38 @@ public class CryptoCurrencyStoreRepository extends JPAQueryDslBaseRepository<Cry
 	     
 	     return query.fetch();
 	}
+	
+	
+	/**
+	 * Get all cryptocurrencies configured by the store
+	 * 
+	 * @param storeQueryVO
+	 * @return
+	 */
+	public Collection<CryptoCurrencyVO> getAllCryptoCurrencyByStore(StoreQueryVO storeQueryVO){
+		
+		 QCryptoCurrencyStoreEntity qCryptoCurrencyStoreEntity = QCryptoCurrencyStoreEntity.cryptoCurrencyStoreEntity;
+		 QStoreEntity qStoreEntity = QStoreEntity.storeEntity;
+		 QCryptoCurrencyEntity qCryptoCurrencyEntity = QCryptoCurrencyEntity.cryptoCurrencyEntity;
+		 QBlockchainEntity qBlockchainEntity = QBlockchainEntity.blockchainEntity;
+	        
+	     JPQLQuery<CryptoCurrencyVO> query = from(qCryptoCurrencyStoreEntity).select(Projections.bean(CryptoCurrencyVO.class,
+	    		 qCryptoCurrencyEntity.id.as("idCoin"), qCryptoCurrencyEntity.coinId, 
+	    		 qBlockchainEntity.id.as("blockchainId"), qBlockchainEntity.name.as("blockchainName")));
+	     
+	     query.innerJoin(qCryptoCurrencyStoreEntity.storeEntity, qStoreEntity);
+	     query.innerJoin(qCryptoCurrencyStoreEntity.cryptocurrencyEntity, qCryptoCurrencyEntity);
+	     query.innerJoin(qCryptoCurrencyEntity.blockchain, qBlockchainEntity);
+	     
+	     BooleanBuilder where = new BooleanBuilder();
+	     
+	     where.and(qCryptoCurrencyEntity.status.eq(Boolean.TRUE));
+	     where.and(qStoreEntity.storeUI.eq(storeQueryVO.getStoreUI()));
+     
+	     query.where(where);
+	     
+	     return query.fetch();
+	}
 
 	/**
 	 * Delete al crypto currencys of the store
@@ -102,13 +134,15 @@ public class CryptoCurrencyStoreRepository extends JPAQueryDslBaseRepository<Cry
 		QCryptoCurrencyStoreEntity qCryptoCurrencyStoreEntity = QCryptoCurrencyStoreEntity.cryptoCurrencyStoreEntity;
 		QStoreEntity qStoreEntity = QStoreEntity.storeEntity;
 		QCryptoCurrencyEntity qCryptoCurrencyEntity = QCryptoCurrencyEntity.cryptoCurrencyEntity;
+		QBlockchainEntity qBlockchainEntity = QBlockchainEntity.blockchainEntity;
 		
 		 JPQLQuery<CryptoCurrencyVO> query = from(qCryptoCurrencyStoreEntity).select(Projections.bean(CryptoCurrencyVO.class,
 	    		 qCryptoCurrencyStoreEntity.storeId.as("idStore"), qCryptoCurrencyEntity.smartContract, qCryptoCurrencyEntity.blockchainId,
-	    		 qCryptoCurrencyEntity.id.as("idCoin"), qCryptoCurrencyEntity.coinId, qCryptoCurrencyEntity.smartContract));
+	    		 qCryptoCurrencyEntity.id.as("idCoin"), qCryptoCurrencyEntity.coinId,qBlockchainEntity.javaClass));
 	     
 	     query.innerJoin(qCryptoCurrencyStoreEntity.storeEntity, qStoreEntity);
 	     query.innerJoin(qCryptoCurrencyStoreEntity.cryptocurrencyEntity, qCryptoCurrencyEntity);
+	     query.innerJoin(qCryptoCurrencyEntity.blockchain, qBlockchainEntity);
 	    
 		 BooleanBuilder where = new BooleanBuilder();	     
 		 where.and(qStoreEntity.storeUI.eq(storeQueryVO.getStoreUI()));

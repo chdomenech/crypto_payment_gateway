@@ -25,6 +25,13 @@ public interface IBlockchain {
 	 */
 	Collection<TransactionsVO> checkTransaction(Collection<TransactionsVO> transactions);
 	
+	
+	/**
+	 * Check transaction ATM
+	 * 
+	 */
+	Collection<TransactionsVO> checkBalanceWalletATM(Collection<TransactionsVO> transactions);
+	
 	/**
 	 * Send coins to wallet
 	 * 

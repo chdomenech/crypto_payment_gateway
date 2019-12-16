@@ -28,7 +28,16 @@ public interface IStoreService{
     List<StoreCryptoCurrenciesVO> findCoinsForUIstore(StoreQueryVO storeQueryVO);
     
     /**
-     * List all cryptocurrencys of the store
+     * List All cryptocurrencys of the store
+     * and calculate the price
+     * 
+     * @param storeQueryVO
+     * @return
+     */
+    ResponseVO findCoinsByUIstore(StoreQueryVO storeQueryVO);
+    
+    /**
+     * List All cryptocurrencys of the store
      * 
      * @param storeQueryVO
      * @return

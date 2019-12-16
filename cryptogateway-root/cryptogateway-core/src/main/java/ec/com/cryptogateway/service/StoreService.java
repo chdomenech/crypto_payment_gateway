@@ -81,7 +81,7 @@ public class StoreService implements IStoreService{
      * @return
      */
 	@Override
-	public ResponseVO findAllCoinsForUIstore(StoreQueryVO storeQueryVO) {
+	public ResponseVO findCoinsByUIstore(StoreQueryVO storeQueryVO) {
 			
 		if(storeQueryVO==null || storeQueryVO.getStoreUI()== null)
 			return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.MESSAGE_ERROR_STORE_NOT_FOUND);	
@@ -92,6 +92,28 @@ public class StoreService implements IStoreService{
 			return new ResponseVO(CryptoGatewayConstants.FULL_LIST, null, storeCryptoCurrencies);	
 		}else {	
 			return new ResponseVO(CryptoGatewayConstants.EMPTY_LIST, CryptoGatewayConstants.MESSAGE_STORE_COINS_CONFIGURATION, storeCryptoCurrencies);
+		}
+
+	}
+	
+	/**
+     * List all cryptocurrencys of the store
+     * 
+     * @param storeQueryVO
+     * @return
+     */
+	@Override
+	public ResponseVO findAllCoinsForUIstore(StoreQueryVO storeQueryVO) {
+			
+		if(storeQueryVO==null || storeQueryVO.getStoreUI()== null)
+			return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.MESSAGE_ERROR_STORE_NOT_FOUND);			
+	
+		Collection<CryptoCurrencyVO> cryptoCurrencys = cryptoCurrencyStoreRepository.getAllCryptoCurrencyByStore(storeQueryVO);	
+		
+		if(!cryptoCurrencys.isEmpty()) {		
+			return new ResponseVO(CryptoGatewayConstants.FULL_LIST, null, cryptoCurrencys);	
+		}else {	
+			return new ResponseVO(CryptoGatewayConstants.EMPTY_LIST, CryptoGatewayConstants.MESSAGE_STORE_COINS_CONFIGURATION, cryptoCurrencys);
 		}
 
 	}

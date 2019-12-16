@@ -40,7 +40,7 @@ public class ApisUtil {
             
     			return object;
     		}catch (Exception e) {
-    			log.error(e.getCause().getMessage());
+    			log.error("Error in get Cryptos Currency Info {}",e);
 				throw e;				
 			}	
     }

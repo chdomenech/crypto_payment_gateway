@@ -38,13 +38,29 @@ public class StoreController {
 	 }
 	 
 	/**
-	 * Get all cryptos by store
+	 * Get cryptos by store
 	 * 
 	 * @param storeQueryVO
 	 * @return
 	 */
 	@PostMapping("getCryptosPayment")
-    public Mono<ResponseVO> getCryptos(@Valid @RequestBody StoreQueryVO storeQueryVO) {
+    public Mono<ResponseVO> getCryptosPayment(@Valid @RequestBody StoreQueryVO storeQueryVO) {
+        try {		
+			return Mono.justOrEmpty(CoreUtils.responseSuccessfull(storeService.findCoinsByUIstore(storeQueryVO)));		
+		}catch(Exception e) {
+			log.error("Exception thown in getCryptos {}",e);			
+			 return Mono.justOrEmpty(CoreUtils.responseException(e));			
+		} 
+    }	
+	
+	/**
+	 * Get all cryptos by store
+	 * 
+	 * @param storeQueryVO
+	 * @return
+	 */
+	@PostMapping("getAllCryptosFromStore")
+    public Mono<ResponseVO> getAllCryptos(@Valid @RequestBody StoreQueryVO storeQueryVO) {
         try {		
 			return Mono.justOrEmpty(CoreUtils.responseSuccessfull(storeService.findAllCoinsForUIstore(storeQueryVO)));		
 		}catch(Exception e) {

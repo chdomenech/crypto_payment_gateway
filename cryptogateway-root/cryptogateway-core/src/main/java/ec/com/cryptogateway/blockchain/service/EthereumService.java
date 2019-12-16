@@ -76,7 +76,24 @@ public class EthereumService implements IEthereumService{
 		
 		return walletVO;
 	}
+	
+	
+	/**
+	 * checkTransactionATM
+	 * 
+	 */
+	@Override
+	public Collection<TransactionsVO> checkBalanceWalletATM(Collection<TransactionsVO> transactions) {
+		
+		 Web3j web3 = Web3j.build(new HttpService(CryptoGatewayConstants.URL_INFURA_API_ETHEREUM));
+		 log.debug("Successfuly connected to Ethereum");
 
+		//Chequea el fee eth 
+		//Chequea el monto de eth o tokens a enviar
+		
+		return null;
+		
+	}
 
 	/**
 	 * checkTransaction

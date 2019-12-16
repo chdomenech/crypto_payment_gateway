@@ -26,7 +26,7 @@ public interface IStoreRepository extends IQueryDslBaseRepository<StoreEntity> {
 	 * Find store by some field
 	 * 
 	 */
-	Boolean isExist(StoreQueryVO storeVO) ;	
+	Boolean isExist(StoreQueryVO storeVO);	
 	
 	
 	/**

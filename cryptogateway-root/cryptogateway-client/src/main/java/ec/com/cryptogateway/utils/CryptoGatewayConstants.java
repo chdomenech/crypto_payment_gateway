@@ -23,6 +23,8 @@ public class CryptoGatewayConstants {
 	public static final String ERROR_ATM_STORE_NOT_ACCEPT_COIN="ERROR LA TIENDA NO ACEPTA ESTE TIPO DE CRIPTOMONEDAS";
 	public static final String ERROR_ATM_WALLET_NOT_HAVE_FUNDS="ERROR LA CUENTA NO TIENE SUFICIENTES FONDOS";
 	
+	public static final String ERROR_TO_CHECK_BALANCE="SUCEDIO UN ERROR AL CHEQUEAR BALANCE";
+	
 	
 	public static final String MESSAGE_SUCCESSFULL_USER_FOUND= "Usuario puede autenticarse";
 	public static final String MESSAGE_ERROR_USER_NOT_FOUND= "Usuario o password incorrecto";

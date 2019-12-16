@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.web3j.tx.gas.DefaultGasProvider;
 
 import cryptogateway.vo.request.MailVO;
 import cryptogateway.vo.request.StoreQueryVO;
@@ -83,6 +84,10 @@ public class TransactionService implements ITransactionService{
 	IEmailService emailService;
 	
 	static String classPackage = "ec.com.cryptogateway.blockchain.service.";
+	
+	private static final String METHOD_CHECK_BALANCE ="checkTransaction";
+	
+	private static final String METHOD_CHECK_BALANCE_ATM ="checkTransactionATM";
 
 	/**
 	 * 
@@ -197,7 +202,7 @@ public class TransactionService implements ITransactionService{
 		
 		blockchains.forEach(data->{
 			try {
-                Object object =  checkBalanceWallet(data.getJavaClass(),data.getTransactionsVO());
+                Object object = checkBalanceWallet(data.getJavaClass(),data.getTransactionsVO(),METHOD_CHECK_BALANCE);
 				updateTransactions(object);
 			}catch (Exception e) {
 				log.error("Error to check transactions {}", e);
@@ -219,16 +224,15 @@ public class TransactionService implements ITransactionService{
 	 * @throws InvocationTargetException
 	 * @throws InstantiationException
 	 */
-	private Object checkBalanceWallet(String javaClass,Collection<TransactionsVO> transactionCheckVO) throws ClassNotFoundException, 
+	private Object checkBalanceWallet(String javaClass, Collection<TransactionsVO> transactionCheckVO, String methodName) throws ClassNotFoundException, 
 	NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, 
 	InvocationTargetException, InstantiationException {
 		
 		Class<?> clase = Class.forName(classPackage.concat(javaClass));
 		Constructor<?> cons1 = clase.getConstructor();
-		Method method = clase.getDeclaredMethod("checkTransaction",Collection.class);
+		Method method = clase.getDeclaredMethod(methodName,Collection.class);
 		method.setAccessible(true);
-        return method.invoke(cons1.newInstance(),transactionCheckVO);	
-		
+        return method.invoke(cons1.newInstance(),transactionCheckVO);		
 	}
 	
 	/**
@@ -355,20 +359,38 @@ public class TransactionService implements ITransactionService{
 		CryptoCurrencyVO cryptoCurrencyVO = cryptoCurrencyStoreRepository.checkStoreAcceptCoin(storeQueryVO);
 		if(cryptoCurrencyVO==null){
 			 return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.ERROR_ATM_STORE_NOT_ACCEPT_COIN);		
+		}		
+		
+		TransactionsVO transactionCheckVO = new TransactionsVO();
+		transactionCheckVO.setWallet(walletVO.getWalletAddress());
+		transactionCheckVO.setPrivateKey(walletVO.getPrivateKey());
+		transactionCheckVO.setPublicKey(walletVO.getPublicKey());
+		transactionCheckVO.setSmartContract(cryptoCurrencyVO.getSmartContract());
+		
+		Collection<TransactionsVO> transactionList= new ArrayList<>();
+		transactionList.add(transactionCheckVO);
+
+		try {
+			//nuevo metodo que cheque el fee mas el token o el monto de eth sumado da la cantidad a enviar
+			
+			Object object = checkBalanceWallet(cryptoCurrencyVO.getJavaClass(),transactionList, METHOD_CHECK_BALANCE_ATM);
+			
+		} catch (Exception e) {			
+			log.error("Exception to check wallet balance in createTransactionATM {}",e);
+			return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.ERROR_TO_CHECK_BALANCE);
 		}
-		
-		
-		//if(!checkAmountAvailable()) {
-			// mas el monto del fee
-			//coinId necesito encontrar la cryptomenda y luego 
-			//buscar con la wallet, monto, smarcontrac el monto disponible de la wallet que no est� comprometido.			
-		//}
+			
+			
+		// mas el monto del fee
+		//coinId necesito encontrar la cryptomenda y luego 
+		//buscar con la wallet, monto, smarcontrac el monto disponible de la wallet que no est� comprometido.			
 		
 		//createTransaction();//Creo la wallet de la tienda y  y es la que se va usar para el withdral
 		
 		//analiza la respuesta del withdrawl;
 		
-		return null;
-		
+		return null;		
 	}
+
+	
 }
