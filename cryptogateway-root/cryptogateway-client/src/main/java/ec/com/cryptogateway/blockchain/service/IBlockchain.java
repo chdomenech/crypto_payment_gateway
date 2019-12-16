@@ -3,11 +3,12 @@ package ec.com.cryptogateway.blockchain.service;
 import java.util.Collection;
 
 import cryptogateway.vo.request.TransactionsVO;
+import cryptogateway.vo.response.WalletBalance;
 import cryptogateway.vo.response.WalletVO;
 
 /**
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 public interface IBlockchain {
@@ -30,7 +31,7 @@ public interface IBlockchain {
 	 * Check transaction ATM
 	 * 
 	 */
-	Collection<TransactionsVO> checkBalanceWalletATM(Collection<TransactionsVO> transactions);
+	WalletBalance checkBalanceWalletATM(TransactionsVO transaction) throws Exception;
 	
 	/**
 	 * Send coins to wallet

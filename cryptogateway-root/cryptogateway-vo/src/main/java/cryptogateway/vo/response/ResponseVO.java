@@ -12,8 +12,7 @@ import lombok.Data;
 
 /**
  * 
- * @author Christian
- * @param <T>
+ * @author Christian Domenech
  *
  */
 @Data

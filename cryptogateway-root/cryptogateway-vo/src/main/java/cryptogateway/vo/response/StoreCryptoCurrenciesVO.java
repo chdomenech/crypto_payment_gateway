@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
  * Send information about cryptocurrency 
  * accepted for the store
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 @Data

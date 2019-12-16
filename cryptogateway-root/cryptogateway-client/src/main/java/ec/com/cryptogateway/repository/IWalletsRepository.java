@@ -8,7 +8,7 @@ import ec.com.cryptogateway.entity.WalletsEntity;
 /**
  * WalletsRepository Repository
  * 	
- * @author Christian
+ * @author Christian Domenech
  *
  */
 public interface IWalletsRepository extends IQueryDslBaseRepository<WalletsEntity> {

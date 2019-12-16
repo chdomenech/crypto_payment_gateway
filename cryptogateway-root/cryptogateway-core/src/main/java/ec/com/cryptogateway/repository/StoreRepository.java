@@ -18,7 +18,7 @@ import ec.com.cryptogateway.entity.StoreEntity;
 /**
  * Store Repository
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 @Lazy

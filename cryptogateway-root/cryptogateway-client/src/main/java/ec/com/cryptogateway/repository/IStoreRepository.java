@@ -9,7 +9,7 @@ import ec.com.cryptogateway.entity.StoreEntity;
 /**
  * Store Repository
  * 	
- * @author Christian
+ * @author Christian Domenech
  *
  */
 public interface IStoreRepository extends IQueryDslBaseRepository<StoreEntity> {

@@ -8,7 +8,7 @@ import ec.com.cryptogateway.entity.TransactionStatusEntity;
 /**
  * TransactionStatusRepository Repository
  * 	
- * @author Christian
+ * @author Christian Domenech
  *
  */
 public interface ITransactionStatusRepository extends JpaRepository<TransactionStatusEntity,Integer>{

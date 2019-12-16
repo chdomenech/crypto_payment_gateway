@@ -35,7 +35,7 @@ import ec.cryptogateway.utils.CoreUtils;
 /**
  * Store Service
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 @Transactional

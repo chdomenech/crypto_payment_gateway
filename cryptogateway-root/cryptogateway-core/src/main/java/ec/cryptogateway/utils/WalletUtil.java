@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 @Slf4j

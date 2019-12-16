@@ -10,7 +10,7 @@ import ec.com.cryptogateway.blockchain.service.IBitcoinService;
 
 /**
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 @Service

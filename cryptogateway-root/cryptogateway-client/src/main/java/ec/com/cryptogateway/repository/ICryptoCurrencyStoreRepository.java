@@ -10,7 +10,7 @@ import ec.com.cryptogateway.entity.CryptoCurrencyStoreEntity;
 /**
  * CryptoCurrencyStore Repository
  *  
- * @author Christian
+ * @author Christian Domenech
  *
  */
 public interface ICryptoCurrencyStoreRepository extends IQueryDslBaseRepository<CryptoCurrencyStoreEntity>{

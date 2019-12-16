@@ -17,7 +17,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.web3j.tx.gas.DefaultGasProvider;
+import org.springframework.util.StringUtils;
 
 import cryptogateway.vo.request.MailVO;
 import cryptogateway.vo.request.StoreQueryVO;
@@ -29,6 +29,7 @@ import cryptogateway.vo.response.CryptoCurrencyVO;
 import cryptogateway.vo.response.ResponseVO;
 import cryptogateway.vo.response.StoreCryptoCurrenciesVO;
 import cryptogateway.vo.response.TransactionVO;
+import cryptogateway.vo.response.WalletBalance;
 import cryptogateway.vo.response.WalletVO;
 import ec.com.cryptogateway.entity.StoreEntity;
 import ec.com.cryptogateway.entity.TransactionEntity;
@@ -48,7 +49,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 @Slf4j
@@ -371,24 +372,49 @@ public class TransactionService implements ITransactionService{
 		transactionList.add(transactionCheckVO);
 
 		try {
-			//nuevo metodo que cheque el fee mas el token o el monto de eth sumado da la cantidad a enviar
-			
+		
 			Object object = checkBalanceWallet(cryptoCurrencyVO.getJavaClass(),transactionList, METHOD_CHECK_BALANCE_ATM);
+			
+			WalletBalance walletBalance = null;
+		    if(object!=null) {
+		    	walletBalance = (WalletBalance) object;	 
+		    	
+		    	//Si es eth solamente debe tener los eth mas el fee 
+		    	if(walletBalance.getFee()!=null &&  
+		    			StringUtils.isEmpty(cryptoCurrencyVO.getSmartContract()) && 
+		    			walletBalance.getBalance().add(walletBalance.getFee())
+		    			.compareTo(transactionATMVO.getAmount())>=0) {
+		    		
+		    		//withdrawl();
+		    		
+		    	}else {
+		    		
+		    		return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.ERROR_ATM_WALLET_NOT_HAVE_FUNDS);
+		    	}
+		    	
+		    	//Si es token debe tener tokens mas fee
+		    	if(walletBalance.getFee()!=null &&  
+		    			!StringUtils.isEmpty(cryptoCurrencyVO.getSmartContract()) && 
+		    			walletBalance.getBalanceTokens().compareTo(transactionATMVO.getAmount())>=0 
+		    			&& walletBalance.getBalance().compareTo(walletBalance.getFee())>=0) {
+		    		
+		    		//withdrawl();
+		    		
+		    	}else {
+		    		
+		    		return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.ERROR_ATM_WALLET_NOT_HAVE_FUNDS);
+		    	}
+    
+		    }else {
+		    	return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.ERROR_TO_CHECK_BALANCE);		    	
+		    }
 			
 		} catch (Exception e) {			
 			log.error("Exception to check wallet balance in createTransactionATM {}",e);
 			return new ResponseVO(CryptoGatewayConstants.STATUS_ERROR, CryptoGatewayConstants.ERROR_TO_CHECK_BALANCE);
 		}
 			
-			
-		// mas el monto del fee
-		//coinId necesito encontrar la cryptomenda y luego 
-		//buscar con la wallet, monto, smarcontrac el monto disponible de la wallet que no est� comprometido.			
-		
-		//createTransaction();//Creo la wallet de la tienda y  y es la que se va usar para el withdral
-		
-		//analiza la respuesta del withdrawl;
-		
+
 		return null;		
 	}
 

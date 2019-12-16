@@ -17,7 +17,7 @@ import ec.com.cryptogateway.entity.QBlockchainEntity;
 /**
  * Blockchain repository
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 @Lazy

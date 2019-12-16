@@ -25,6 +25,7 @@ import org.web3j.utils.Convert.Unit;
 import org.web3j.utils.Numeric;
 
 import cryptogateway.vo.request.TransactionsVO;
+import cryptogateway.vo.response.WalletBalance;
 import cryptogateway.vo.response.WalletVO;
 import ec.com.cryptogateway.utils.CryptoGatewayConstants;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Ethereum Service 
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 @Slf4j
@@ -80,18 +81,33 @@ public class EthereumService implements IEthereumService{
 	
 	/**
 	 * checkTransactionATM
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
+	 * @throws IOException 
 	 * 
 	 */
 	@Override
-	public Collection<TransactionsVO> checkBalanceWalletATM(Collection<TransactionsVO> transactions) {
+	public WalletBalance checkBalanceWalletATM(TransactionsVO transaction) throws Exception{
 		
 		 Web3j web3 = Web3j.build(new HttpService(CryptoGatewayConstants.URL_INFURA_API_ETHEREUM));
 		 log.debug("Successfuly connected to Ethereum");
+			 	
+	 	BigDecimal balanceTokens = BigDecimal.ZERO;
+	 	BigDecimal balanceETH = BigDecimal.ZERO; 
+	 	WalletBalance walletBalance = new WalletBalance();
+		 
+	 	balanceETH = getBalanceEther(web3, transaction.getWallet());
+	 	if(!StringUtils.isEmpty(transaction.getSmartContract())) {	
+	 		balanceTokens = getBalanceTokens(web3, transaction);				
+		}
+ 
+	 	
+	 	walletBalance.setBalance(balanceETH);
+	 	walletBalance.setBalanceTokens(balanceTokens);
+	 	
+	 	walletBalance.setFee(null);//DEBO BUSCAR EL FEE DE LA RED DE ETH Y CONVERTIRLO A ESTE, Convert.fromWei(balance.toString(), Unit.ETHER);
 
-		//Chequea el fee eth 
-		//Chequea el monto de eth o tokens a enviar
-		
-		return null;
+		return walletBalance;
 		
 	}
 
@@ -113,7 +129,7 @@ public class EthereumService implements IEthereumService{
 				if(StringUtils.isEmpty(data.getSmartContract())) {					
 					 balance = getBalanceEther(web3, data.getWallet());
 				}else {
-					balance = getBalanceTokens(web3, data);				
+					balance = getBalanceTokens(web3, data);			
 				}
 				
 			data.setWalletBalance(balance);

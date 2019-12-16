@@ -14,7 +14,7 @@ import ec.com.cryptogateway.utils.CryptoGatewayConstants;
 
 /**
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 public class CoreUtils {

@@ -11,7 +11,7 @@ import ec.com.cryptogateway.repository.IWalletsRepository;
 /**
  * Wallet service
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 @Service

@@ -21,7 +21,7 @@ import ec.com.cryptogateway.utils.CryptoGatewayConstants;
 /**
  * Transaction Repository
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 @Lazy

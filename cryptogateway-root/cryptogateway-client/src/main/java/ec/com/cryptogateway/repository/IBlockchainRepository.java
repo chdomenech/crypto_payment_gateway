@@ -9,7 +9,7 @@ import ec.com.cryptogateway.entity.BlockchainEntity;
 /**
  * Interface of Blockchain Repository
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 public interface IBlockchainRepository extends IQueryDslBaseRepository<BlockchainEntity> {

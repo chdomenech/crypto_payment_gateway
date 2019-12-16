@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 @Data

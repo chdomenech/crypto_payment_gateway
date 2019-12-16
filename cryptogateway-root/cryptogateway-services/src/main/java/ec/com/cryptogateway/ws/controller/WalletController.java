@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 
 /**
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 @RequestMapping(value="wallet")

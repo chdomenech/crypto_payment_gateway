@@ -9,7 +9,7 @@ import ec.com.cryptogateway.entity.TransactionEntity;
 /**
  * TransactionRepository Repository
  * 	
- * @author Christian
+ * @author Christian Domenech
  *
  */
 public interface ITransactionRepository extends  IQueryDslBaseRepository<TransactionEntity> {

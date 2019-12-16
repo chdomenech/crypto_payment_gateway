@@ -14,7 +14,7 @@ import ec.com.cryptogateway.entity.QCryptoCurrencyEntity;
 
 /**
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 @Lazy

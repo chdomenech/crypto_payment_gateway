@@ -23,7 +23,7 @@ import ec.com.cryptogateway.entity.QStoreEntity;
 /**
  * CryptoCurrencyStoreRepository
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 @Lazy

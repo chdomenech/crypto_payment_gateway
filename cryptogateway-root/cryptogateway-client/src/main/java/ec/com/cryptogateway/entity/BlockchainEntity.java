@@ -19,7 +19,7 @@ import lombok.ToString;
 /**
  * BlockChain Entity
  * 
- * @author Christian
+ * @author Christian Domenech
  *
  */
 @Getter
