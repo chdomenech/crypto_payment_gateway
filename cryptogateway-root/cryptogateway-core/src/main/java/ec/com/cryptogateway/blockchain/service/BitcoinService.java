@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.springframework.stereotype.Service;
 
 import cryptogateway.vo.request.TransactionsVO;
+import cryptogateway.vo.response.WalletBalance;
 import cryptogateway.vo.response.WalletVO;
 import ec.com.cryptogateway.blockchain.service.IBitcoinService;
 
@@ -28,6 +29,12 @@ public class BitcoinService implements IBitcoinService{
 
 	@Override
 	public Collection<TransactionsVO> checkTransaction(Collection<TransactionsVO> transactions) {
+		return null;
+	}
+
+	@Override
+	public WalletBalance checkBalanceWalletATM(TransactionsVO transaction) throws Exception {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

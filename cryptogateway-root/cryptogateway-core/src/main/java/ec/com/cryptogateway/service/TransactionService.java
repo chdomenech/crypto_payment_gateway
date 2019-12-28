@@ -88,7 +88,7 @@ public class TransactionService implements ITransactionService{
 	
 	private static final String METHOD_CHECK_BALANCE ="checkTransaction";
 	
-	private static final String METHOD_CHECK_BALANCE_ATM ="checkTransactionATM";
+	private static final String METHOD_CHECK_BALANCE_ATM ="checkBalanceWalletATM";
 
 	/**
 	 * 
@@ -237,6 +237,32 @@ public class TransactionService implements ITransactionService{
 	}
 	
 	/**
+	 * Check balanace atm
+	 * 
+	 * @param javaClass
+	 * @param transactionCheckVO
+	 * @param methodName
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 * @throws InstantiationException
+	 */
+	private Object checkBalanceWalletAtm(String javaClass, TransactionsVO transactionCheckVO, String methodName) throws ClassNotFoundException, 
+	NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, 
+	InvocationTargetException, InstantiationException {
+		
+		Class<?> clase = Class.forName(classPackage.concat(javaClass));
+		Constructor<?> cons1 = clase.getConstructor();
+		Method method = clase.getDeclaredMethod(methodName,TransactionsVO.class);
+		method.setAccessible(true);
+        return method.invoke(cons1.newInstance(),transactionCheckVO);		
+	}
+	
+	/**
 	 * Update transactions
 	 * 
 	 * @param object
@@ -368,12 +394,9 @@ public class TransactionService implements ITransactionService{
 		transactionCheckVO.setPublicKey(walletVO.getPublicKey());
 		transactionCheckVO.setSmartContract(cryptoCurrencyVO.getSmartContract());
 		
-		Collection<TransactionsVO> transactionList= new ArrayList<>();
-		transactionList.add(transactionCheckVO);
-
 		try {
 		
-			Object object = checkBalanceWallet(cryptoCurrencyVO.getJavaClass(),transactionList, METHOD_CHECK_BALANCE_ATM);
+			Object object = checkBalanceWalletAtm(cryptoCurrencyVO.getJavaClass(), transactionCheckVO, METHOD_CHECK_BALANCE_ATM);
 			
 			WalletBalance walletBalance = null;
 		    if(object!=null) {
