@@ -135,18 +135,19 @@ public class TransactionService implements ITransactionService{
 				 
 				 transactionEntity.setBlockchainId(dataTransaction.getBlockchainId());
 				 transactionEntity.setCoinPrice(dataTransaction.getCryptoCurrencyPrice());
-				 transactionEntity.setCoinsAmount(dataTransaction.getCryptoCurrencyConversion());				 
+				 transactionEntity.setCoinsAmount(dataTransaction.getTotalPayment());				 
 				 transactionEntity.setCreationTime(new Date());		
 				 transactionEntity.setTimeoutTransaction(CoreUtils.addTimeToDate(dataTransaction.getTimeoutMinuts(), 
 				 transactionEntity.getCreationTime()));
 				 transactionEntity.setTotalPayment(dataTransaction.getTotalPayment());
+				 transactionEntity.setNumberOfChecks(0);
 				 		 
 				 transactionRepository.save(transactionEntity);		 
 				 
 				 transactionVO.setCoinId(dataTransaction.getCoinId());
 				 transactionVO.setCoinLogo(dataTransaction.getCryptoCurrencyLogo());
 				 transactionVO.setCoinName(dataTransaction.getCryptoCurrencyName());
-				 transactionVO.setCoinsAmount(dataTransaction.getCryptoCurrencyConversion());
+				 transactionVO.setCoinsAmount(dataTransaction.getTotalPayment());
 				 transactionVO.setWalletAddress(walletVO.getWalletAddress());
 				 transactionVO.setId(transactionEntity.getId());
 				 transactionVO.setCreationTime(transactionEntity.getCreationTime());
@@ -292,22 +293,17 @@ public class TransactionService implements ITransactionService{
        transaction.setId(transactionsVO.getTransactionId());
        transaction.setLastCheckDate(actualDate);
        transaction.setEndTransaction(actualDate);
-       
-       try {
-           transaction.setNumberOfChecks(transactionsVO.getNumberOfChecks()+1);
-       }catch (Exception e) {
-           log.error("Exeption for to set NumberOfChecks {} "+transactionsVO.getTransactionId(), e);
-       }		
+       transaction.setNumberOfChecks(transactionsVO.getNumberOfChecks()+1);
        
         if(transactionsVO.getWalletBalance().compareTo(BigDecimal.ZERO)==0 && 
-                (transactionsVO.getTimeoutTransaction().compareTo(actualDate)==0 
-                || transactionsVO.getTimeoutTransaction().compareTo(actualDate)>0)) {            
+                (actualDate.compareTo(transactionsVO.getTimeoutTransaction())==0 
+                || actualDate.compareTo(transactionsVO.getTimeoutTransaction())>0)) {            
             transaction.setTransactionStatusId(CryptoGatewayConstants.STATUS_TRANSACTION_TIMEOUT); 
             mailVO = createEmailContent("",transactionsVO);
         }
         
         else if(transactionsVO.getWalletBalance().compareTo(BigDecimal.ZERO)==0 && 
-                (transactionsVO.getTimeoutTransaction().compareTo(actualDate)<0)) {    
+                (transactionsVO.getTimeoutTransaction().compareTo(actualDate)>0)) {    
             transaction.setTransactionStatusId(CryptoGatewayConstants.STATUS_TRANSACTION_WAITING);
             transaction.setEndTransaction(null);
          } 
@@ -324,9 +320,14 @@ public class TransactionService implements ITransactionService{
         	mailVO = createEmailContent("",transactionsVO);
        } 
         
-        transactionRepository.updateTransaction(transaction); 
+        try {
         
-        sendEmailTransaction(mailVO);
+        	transactionRepository.updateTransaction(transaction);         
+        	sendEmailTransaction(mailVO);
+        
+        }catch(Exception e) {
+        	log.error("Sucedio un error al guardar {}",transaction );
+        }
 	}
 	
 	/**

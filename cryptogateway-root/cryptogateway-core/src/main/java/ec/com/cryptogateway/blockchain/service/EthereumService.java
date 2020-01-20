@@ -17,6 +17,7 @@ import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.Keys;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.DefaultGasProvider;
@@ -105,8 +106,16 @@ public class EthereumService implements IEthereumService{
 	 	walletBalance.setBalance(balanceETH);
 	 	walletBalance.setBalanceTokens(balanceTokens);
 	 	
-	 	walletBalance.setFee(null);//DEBO BUSCAR EL FEE DE LA RED DE ETH Y CONVERTIRLO A ESTE, Convert.fromWei(balance.toString(), Unit.ETHER);
-
+	 	EthGasPrice gasPrice2 = web3.ethGasPrice().send();
+	 	gasPrice2.getGasPrice();
+	 	
+	 	BigInteger gasPrice = Convert.toWei("23", Unit.GWEI).toBigInteger();
+	 	
+	 	//BigInteger gasPrice = web3.ethGasPrice().sendAsync().get().getGasPrice();
+	 	walletBalance.setFee(Convert.fromWei(gasPrice.toString(), Unit.ETHER));//DEBO BUSCAR EL FEE DE LA RED DE ETH Y CONVERTIRLO A ESTE, ;
+	 	
+	 	
+	 	
 		return walletBalance;
 		
 	}
